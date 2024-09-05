@@ -8,7 +8,13 @@ output: html_document
 ```{r}
 library(readr)
 library(dplyr)
+library(ggplot2)
+library(gridExtra)
 ```
+
+# Data Pre-processing
+
+## Merge datasets
 
 ```{r}
 unique_item <- read_csv("./1_3_dat_unique_item.csv") %>%
@@ -60,17 +66,75 @@ dat <- dat %>%
 write_csv(dat, "dat_merged_1.csv")
 ```
 
+## Summarized to UHF scale
+
 ```{r}
 summary_data <- dat %>%
-  group_by(UHF_id, UHF_name) %>%
-  summarise(ParticipantCount = n())
-
-write_csv(summary_data, "dat_merge_2_UHF.csv")
-
-filtered_data <- summary_data %>%
+  group_by(UHF_id) %>%
+  summarise(
+    ParticipantCount = n(),
+    mean_td_score = round(mean(td_score_scaled, na.rm = TRUE), 2),
+    median_td_score = round(median(td_score_scaled, na.rm = TRUE), 2),
+    sd_td_score = round(sd(td_score_scaled, na.rm = TRUE), 2),
+    mean_ag_score = round(mean(agency_scores_scaled, na.rm = TRUE), 2),
+    median_ag_score = round(median(agency_scores_scaled, na.rm = TRUE), 2),
+    sd_ag_score = round(sd(agency_scores_scaled, na.rm = TRUE), 2),
+    mean_los_score = round(mean(loss_aversion_scores_scaled, na.rm = TRUE), 2),
+    median_los_score = round(median(loss_aversion_scores_scaled, na.rm = TRUE), 2),
+    sd_los_score = round(sd(loss_aversion_scores_scaled, na.rm = TRUE), 2)
+  ) %>%
   filter(ParticipantCount >= 15)
 
-write_csv(filtered_data, "dat_merge_3_UHF>=15.csv")
+write_csv(summary_data, "dat_merge_2_UHF>=15.csv")
 ```
 
 Note: total # of observation = 1211.
+
+# EDA
+
+## Boxplot
+
+```{r}
+p1 <- ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id),
+             aes(x = factor(UHF_id), y = td_score_scaled)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "TD Scores by UHF region", x = "UHF Region", y = "TD Scores")
+
+p2 <- ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id),
+             aes(x = factor(UHF_id), y = agency_scores_scaled)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Agency Scores by UHF region", x = "UHF Region", y = "Agency Score")
+
+p3 <- ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id),
+             aes(x = factor(UHF_id), y = loss_aversion_scores_scaled)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Loss Aversion Scores by UHF region", x = "UHF Region", y = "Loss Aversion Scores")
+
+grid.arrange(p1, p2, p3, ncol = 1)
+```
+
+## Density Plot
+
+```{r}
+ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = td_score_scaled)) +
+  geom_density(fill = "blue", alpha = 0.6) +
+  facet_wrap(~UHF_id) +
+  theme_minimal() +
+  labs(title = "Density Plot of TD Scores by UHF region", x = "TD Score (scaled)", y = "Density")
+
+ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = agency_scores_scaled)) +
+  geom_density(fill = "green", alpha = 0.6) +
+  facet_wrap(~UHF_id) +
+  theme_minimal() +
+  labs(title = "Density Plot of Agency Scores by UHF region", x = "Agency Score (scaled)", y = "Density")
+
+ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = loss_aversion_scores_scaled)) +
+  geom_density(fill = "red", alpha = 0.6) +
+  facet_wrap(~UHF_id) +
+  theme_minimal() +
+  labs(title = "Density Plot of Loss Aversion Scores by UHF region", x = "Loss Aversion Score (scaled)", y = "Density")
+```
+
