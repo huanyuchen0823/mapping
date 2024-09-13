@@ -384,10 +384,11 @@ library(tidyverse)</code></pre>
 ## 
 ##     transpose</code></pre>
 <pre class="r"><code>library(dplyr)</code></pre>
-<div id="merge-three-levels" class="section level1">
-<h1>Merge three levels</h1>
+<div id="merge-three-levels-for-survey-data" class="section level1">
+<h1>Merge three levels for survey data</h1>
 <pre class="r"><code>dat_merged_1 &lt;- read.csv(&quot;./1_output/dat_merged_1.csv&quot;)
 modzcta_zip_counts &lt;- read.csv(&quot;./0_prepare/modzcta_zip_counts.csv&quot;)
+zipcode_uhf_mapping &lt;- read.csv(&quot;./0_prepare/zipcode_uhf_mapping.csv&quot;)
 # filter
 # uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
 
@@ -396,7 +397,15 @@ merged_data &lt;- merge(dat_merged_1, modzcta_zip_counts[, c(&quot;ZCTA_str&quot
   select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything())
   # filter(UHF_id %in% uhf_ids)
 
-write.csv(merged_data, file = &quot;2_output/merged_output.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(merged_data, file = &quot;2_output/merged_output.csv&quot;, row.names = FALSE)
+
+mapping_guide_temp &lt;- merge(modzcta_zip_counts, zipcode_uhf_mapping, by = &quot;zip_code&quot;, all.x = TRUE)
+
+mapping_guide &lt;- mapping_guide_temp %&gt;%
+  select(ZCTA, UHF_id, zip_code) %&gt;%
+  filter(!is.na(UHF_id))
+
+write.csv(mapping_guide, file = &quot;2_output/mapping_guide.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 <div id="download-data" class="section level1">
 <h1>Download Data</h1>
@@ -404,10 +413,9 @@ write.csv(merged_data, file = &quot;2_output/merged_output.csv&quot;, row.names 
 <pre><code>## To install your API key for use in future sessions, run this function with `install = TRUE`.</code></pre>
 <pre class="r"><code>v21 &lt;- load_variables(2021, &quot;acs5&quot;, cache = TRUE)
 write_csv(v21, &#39;./2_output/variable_namesv21.csv&#39;)
-zcta_ls &lt;- unique(merged_data$ZCTA_str)</code></pre>
+zcta_ls &lt;- unique(modzcta_zip_counts$ZCTA)</code></pre>
 <div id="population" class="section level2">
 <h2>Population</h2>
-<p>Note: See “hf_population_summary.csv” file.</p>
 <pre class="r"><code>race_group_popu &lt;- c(
   &#39;B01001A_001&#39;,
   &#39;B01001B_001&#39;,
@@ -431,16 +439,16 @@ population &lt;- get_acs(geography = &quot;zcta&quot;,
     mutate(Total_Estimate = rowSums(select(.,2:8),na.rm=TRUE)) %&gt;%
     select(GEOID, Population = Total_Estimate)</code></pre>
 <pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
-<pre class="r"><code>merged_with_pop &lt;- merge(merged_data, population, 
-                         by.x = &quot;ZCTA_str&quot;, by.y = &quot;GEOID&quot;, 
-                         all.x = TRUE)
+<pre class="r"><code>merged_pop &lt;- merge(mapping_guide, population, 
+                    by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                    all.x = TRUE)
 
-uhf_population_summary &lt;- merged_with_pop %&gt;%
-  distinct(zipcode, .keep_all = TRUE) %&gt;%
+uhf_pop_summary &lt;- merged_pop %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
   group_by(UHF_id) %&gt;%
   summarise(total_population = sum(Population, na.rm = TRUE))
 
-write.csv(uhf_population_summary, file = &quot;2_output/uhf_population_summary.csv&quot;, row.names = FALSE)</code></pre>
+# write.csv(uhf_pop_summary, file = &quot;2_output/uhf_pop_summary.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 </div>
 <div id="no-health-insurance" class="section level1">
@@ -476,19 +484,215 @@ no_health_insurance &lt;- get_acs(geography = &quot;zcta&quot;,
 ##   data %&gt;% select(all_of(ls))
 ## 
 ## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
-<pre class="r"><code>merged_with_no_health &lt;- merge(merged_with_pop, no_health_insurance, 
-                         by.x = &quot;ZCTA_str&quot;, by.y = &quot;GEOID&quot;, 
-                         all.x = TRUE)
+<pre class="r"><code>merged &lt;- merge(merged_pop, no_health_insurance,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
 
-uhf_no_health_summary &lt;- merged_with_no_health %&gt;%
-  distinct(zipcode, .keep_all = TRUE) %&gt;%
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
   group_by(UHF_id) %&gt;%
-  summarise(
-    total_population = sum(Population, na.rm = TRUE),
-    total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE)
-  )
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE))
 
-write.csv(uhf_no_health_summary, file = &quot;2_output/uhf_no_health_summary.csv&quot;, row.names = FALSE)</code></pre>
+# Back-Up
+# merged_with_no_health &lt;- merge(merged_with_pop, no_health_insurance, 
+#                          by.x = &quot;ZCTA_str&quot;, by.y = &quot;GEOID&quot;, 
+#                          all.x = TRUE)
+# 
+# uhf_no_health_summary &lt;- merged_with_no_health %&gt;%
+#   distinct(ZCTA_str, .keep_all = TRUE) %&gt;%
+#   group_by(UHF_id) %&gt;%
+#   summarise(
+#     total_population = sum(Population, na.rm = TRUE),
+#     total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE)
+#   )</code></pre>
+</div>
+<div id="education" class="section level1">
+<h1>Education</h1>
+<pre class="r"><code>bachelor &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = &#39;B06009_005&#39;,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(GEOID, Bachelor = estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, bachelor,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE))</code></pre>
+</div>
+<div id="household-income" class="section level1">
+<h1>Household Income</h1>
+<pre class="r"><code>householdincome &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = &#39;B19019_001&#39;,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(GEOID, Household_income = estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, householdincome,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="household-number" class="section level1">
+<h1>Household Number</h1>
+<pre class="r"><code>householdnum &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = &quot;B08201_001&quot;,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(GEOID, Household_num = estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, householdnum,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="no-vehicles" class="section level1">
+<h1>No Vehicles</h1>
+<pre class="r"><code>no_vehicles &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = &quot;B08201_002&quot;,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(GEOID, No_vehicles = estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, no_vehicles,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="age" class="section level1">
+<h1>Age</h1>
+<pre class="r"><code>ageunder25_groups &lt;- c(
+  # Group 1
+  &#39;B01001B_003&#39;, &#39;B01001B_018&#39;,
+  &#39;B01001C_003&#39;, &#39;B01001C_018&#39;,
+  &#39;B01001D_003&#39;, &#39;B01001D_018&#39;,
+  &#39;B01001E_003&#39;, &#39;B01001E_018&#39;,
+  &#39;B01001F_003&#39;, &#39;B01001F_018&#39;,
+  &#39;B01001G_003&#39;, &#39;B01001G_018&#39;,
+  &#39;B01001H_003&#39;, &#39;B01001H_018&#39;,
+  &#39;B01001I_003&#39;, &#39;B01001I_018&#39;,
+  
+  # Group 2
+  &#39;B01001B_004&#39;, &#39;B01001B_019&#39;,
+  &#39;B01001C_004&#39;, &#39;B01001C_019&#39;,
+  &#39;B01001D_004&#39;, &#39;B01001D_019&#39;,
+  &#39;B01001E_004&#39;, &#39;B01001E_019&#39;,
+  &#39;B01001F_004&#39;, &#39;B01001F_019&#39;,
+  &#39;B01001G_004&#39;, &#39;B01001G_019&#39;,
+  &#39;B01001H_004&#39;, &#39;B01001H_019&#39;,
+  &#39;B01001I_004&#39;, &#39;B01001I_019&#39;,
+  
+  # Group 3
+  &#39;B01001B_005&#39;, &#39;B01001B_020&#39;,
+  &#39;B01001C_005&#39;, &#39;B01001C_020&#39;,
+  &#39;B01001D_005&#39;, &#39;B01001D_020&#39;,
+  &#39;B01001E_005&#39;, &#39;B01001E_020&#39;,
+  &#39;B01001F_005&#39;, &#39;B01001F_020&#39;,
+  &#39;B01001G_005&#39;, &#39;B01001G_020&#39;,
+  &#39;B01001H_005&#39;, &#39;B01001H_020&#39;,
+  &#39;B01001I_005&#39;, &#39;B01001I_020&#39;,
+  
+  # Group 4
+  &#39;B01001B_006&#39;, &#39;B01001B_021&#39;,
+  &#39;B01001C_006&#39;, &#39;B01001C_021&#39;,
+  &#39;B01001D_006&#39;, &#39;B01001D_021&#39;,
+  &#39;B01001E_006&#39;, &#39;B01001E_021&#39;,
+  &#39;B01001F_006&#39;, &#39;B01001F_021&#39;,
+  &#39;B01001G_006&#39;, &#39;B01001G_021&#39;,
+  &#39;B01001H_006&#39;, &#39;B01001H_021&#39;,
+  &#39;B01001I_006&#39;, &#39;B01001I_021&#39;,
+  
+  # Group 5
+  &#39;B01001B_007&#39;, &#39;B01001B_022&#39;,
+  &#39;B01001C_007&#39;, &#39;B01001C_022&#39;,
+  &#39;B01001D_007&#39;, &#39;B01001D_022&#39;,
+  &#39;B01001E_007&#39;, &#39;B01001E_022&#39;,
+  &#39;B01001F_007&#39;, &#39;B01001F_022&#39;,
+  &#39;B01001G_007&#39;, &#39;B01001G_022&#39;,
+  &#39;B01001H_007&#39;, &#39;B01001H_022&#39;,
+  &#39;B01001I_007&#39;, &#39;B01001I_022&#39;,
+  
+  # Group 6
+  &#39;B01001B_008&#39;, &#39;B01001B_023&#39;,
+  &#39;B01001C_008&#39;, &#39;B01001C_023&#39;,
+  &#39;B01001D_008&#39;, &#39;B01001D_023&#39;,
+  &#39;B01001E_008&#39;, &#39;B01001E_023&#39;,
+  &#39;B01001F_008&#39;, &#39;B01001F_023&#39;,
+  &#39;B01001G_008&#39;, &#39;B01001G_023&#39;,
+  &#39;B01001H_008&#39;, &#39;B01001H_023&#39;,
+  &#39;B01001I_008&#39;, &#39;B01001I_023&#39;
+)
+
+ls &lt;- length(ageunder25_groups) + 1
+ageunder25_groups &lt;- get_acs(geography = &quot;zcta&quot;,
+                             variables = ageunder25_groups,
+                             year = 2021,
+                             zcta = zcta_ls,
+                             moe_level = 90,
+                             survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(., 2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Ageunder25 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, ageunder25_groups,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE)
+  )</code></pre>
 </div>
 
 
