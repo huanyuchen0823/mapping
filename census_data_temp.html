@@ -432,7 +432,7 @@ population &lt;- get_acs(geography = &quot;zcta&quot;,
     select(GEOID, Population = Total_Estimate)</code></pre>
 <pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
 <pre class="r"><code>merged_with_pop &lt;- merge(merged_data, population, 
-                         by.x = &quot;zipcode&quot;, by.y = &quot;GEOID&quot;, 
+                         by.x = &quot;ZCTA_str&quot;, by.y = &quot;GEOID&quot;, 
                          all.x = TRUE)
 
 uhf_population_summary &lt;- merged_with_pop %&gt;%
