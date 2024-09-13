@@ -436,11 +436,59 @@ population &lt;- get_acs(geography = &quot;zcta&quot;,
                          all.x = TRUE)
 
 uhf_population_summary &lt;- merged_with_pop %&gt;%
+  distinct(zipcode, .keep_all = TRUE) %&gt;%
   group_by(UHF_id) %&gt;%
   summarise(total_population = sum(Population, na.rm = TRUE))
 
 write.csv(uhf_population_summary, file = &quot;2_output/uhf_population_summary.csv&quot;, row.names = FALSE)</code></pre>
 </div>
+</div>
+<div id="no-health-insurance" class="section level1">
+<h1>NO HEALTH INSURANCE</h1>
+<pre class="r"><code>rows_with_no_insurance &lt;- v21[grep(&quot;No health insurance coverage&quot;, v21$label), ]
+sub_no_insurance &lt;- rows_with_no_insurance[rows_with_no_insurance$concept ==
+                                             &quot;HEALTH INSURANCE COVERAGE STATUS BY SEX BY AGE&quot;,]
+nohealthinsurance_groups &lt;- sub_no_insurance$name
+ls &lt;- length(nohealthinsurance_groups)+1
+
+no_health_insurance &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = nohealthinsurance_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, No_health_insurance = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre><code>## Warning: There was 1 warning in `mutate()`.
+## ℹ In argument: `Total_Estimate = rowSums(select(., 2:ls), na.rm = TRUE)`.
+## Caused by warning:
+## ! Using an external vector in selections was deprecated in tidyselect 1.1.0.
+## ℹ Please use `all_of()` or `any_of()` instead.
+##   # Was:
+##   data %&gt;% select(ls)
+## 
+##   # Now:
+##   data %&gt;% select(all_of(ls))
+## 
+## See &lt;https://tidyselect.r-lib.org/reference/faq-external-vector.html&gt;.</code></pre>
+<pre class="r"><code>merged_with_no_health &lt;- merge(merged_with_pop, no_health_insurance, 
+                         by.x = &quot;ZCTA_str&quot;, by.y = &quot;GEOID&quot;, 
+                         all.x = TRUE)
+
+uhf_no_health_summary &lt;- merged_with_no_health %&gt;%
+  distinct(zipcode, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(
+    total_population = sum(Population, na.rm = TRUE),
+    total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE)
+  )
+
+write.csv(uhf_no_health_summary, file = &quot;2_output/uhf_no_health_summary.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 
 

@@ -69,9 +69,103 @@ merged_with_pop <- merge(merged_data, population,
                          all.x = TRUE)
 
 uhf_population_summary <- merged_with_pop %>%
+  distinct(ZCTA_str, .keep_all = TRUE) %>%
   group_by(UHF_id) %>%
   summarise(total_population = sum(Population, na.rm = TRUE))
 
-write.csv(uhf_population_summary, file = "2_output/uhf_population_summary.csv", row.names = FALSE)
+# write.csv(uhf_population_summary, file = "2_output/uhf_population_summary.csv", row.names = FALSE)
+```
+
+# NO HEALTH INSURANCE
+
+```{r}
+rows_with_no_insurance <- v21[grep("No health insurance coverage", v21$label), ]
+sub_no_insurance <- rows_with_no_insurance[rows_with_no_insurance$concept ==
+                                             "HEALTH INSURANCE COVERAGE STATUS BY SEX BY AGE",]
+nohealthinsurance_groups <- sub_no_insurance$name
+ls <- length(nohealthinsurance_groups)+1
+
+no_health_insurance <- get_acs(geography = "zcta",
+                    variables = nohealthinsurance_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, No_health_insurance = Total_Estimate)
+
+merged_with_no_health <- merge(merged_with_pop, no_health_insurance, 
+                         by.x = "ZCTA_str", by.y = "GEOID", 
+                         all.x = TRUE)
+
+uhf_no_health_summary <- merged_with_no_health %>%
+  distinct(ZCTA_str, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(
+    total_population = sum(Population, na.rm = TRUE),
+    total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE)
+  )
+
+# write.csv(uhf_no_health_summary, file = "2_output/uhf_no_health_summary.csv", row.names = FALSE)
+```
+
+# Education
+
+```{r}
+bachelor <- get_acs(geography = "zcta",
+                    variables = 'B06009_005',
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select(GEOID, Bachelor = estimate)
+
+merged_with_bachelor <- merge(merged_with_no_health, bachelor, 
+                         by.x = "ZCTA_str", by.y = "GEOID", 
+                         all.x = TRUE)
+
+uhf_bachelor_summary <- merged_with_bachelor %>%
+  distinct(ZCTA_str, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(
+    total_population = sum(Population, na.rm = TRUE),
+    total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+    total_bachelor = sum(Bachelor, na.rm = TRUE),
+  )
+
+# write.csv(uhf_bachelor_summary, file = "2_output/uhf_bachelor_summary.csv", row.names = FALSE)
+```
+
+# Household Income
+
+```{r}
+householdincome <- get_acs(geography = "zcta",
+                    variables = 'B19019_001',
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select(GEOID, Household_income = estimate)
+
+# Same ideas as previously mentioned
+merged <- merge(merged_with_bachelor, householdincome,
+                by.x = "ZCTA_str", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA_str, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(
+    total_population = sum(Population, na.rm = TRUE),
+    total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+    total_bachelor = sum(Bachelor, na.rm = TRUE),
+    total_householdincome = sum(Household_income, na.rm = TRUE)
+  )
+
+write.csv(uhf_summary, file = "2_output/uhf_summary.csv", row.names = FALSE)
 ```
 
