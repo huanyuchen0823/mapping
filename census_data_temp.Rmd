@@ -1,0 +1,23 @@
+---
+title: "census_data_temp"
+output: html_document
+---
+
+```{r}
+library(tidycensus)
+library(tidyverse)
+library(viridis)
+library(data.table)
+```
+
+```{r}
+census_api_key("919b37e63df029d1420900f893770f49d4a03226")
+v21 <- load_variables(2021, "acs5", cache = TRUE)
+View(v21)
+write_csv(v21,'../data/variable_namesv21.csv')
+
+mod_counts <- read.csv('../results/modzcta_zip_counts.csv')
+select_zcta <- mod_counts[mod_counts$modzcta_count > 15, "ZCTA"]
+zcta_ls <- select_zcta[!select_zcta %in% c(10004,10007,10005,10271)]
+```
+

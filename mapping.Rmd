@@ -137,4 +137,3 @@ ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = loss_aversion_sc
   theme_minimal() +
   labs(title = "Density Plot of Loss Aversion Scores by UHF region", x = "Loss Aversion Score (scaled)", y = "Density")
 ```
-
