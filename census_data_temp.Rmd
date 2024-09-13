@@ -11,21 +11,20 @@ library(data.table)
 library(dplyr)
 ```
 
-# Merge three levels and filter UHF > 15
-
-Note: The observation changes from 1344 to 1211 after filtering.
+# Merge three levels
 
 ```{r}
-dat_merged_1 <- read.csv("./dat_merged_1.csv")
-modzcta_zip_counts <- read.csv("./modzcta_zip_counts.csv")
-uhf_ids <- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
+dat_merged_1 <- read.csv("./1_output/dat_merged_1.csv")
+modzcta_zip_counts <- read.csv("./0_prepare/modzcta_zip_counts.csv")
+# filter
+# uhf_ids <- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
 
 merged_data <- merge(dat_merged_1, modzcta_zip_counts[, c("ZCTA_str", "zip_code")], 
                      by.x = "zipcode", by.y = "zip_code", all.x = TRUE) %>%
-  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything()) %>%
-  filter(UHF_id %in% uhf_ids)
+  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything())
+  # filter(UHF_id %in% uhf_ids)
 
-write.csv(merged_data, file = "merged_output.csv", row.names = FALSE)
+write.csv(merged_data, file = "2_output/merged_output.csv", row.names = FALSE)
 ```
 
 # Download Data
@@ -33,7 +32,7 @@ write.csv(merged_data, file = "merged_output.csv", row.names = FALSE)
 ```{r}
 census_api_key("919b37e63df029d1420900f893770f49d4a03226")
 v21 <- load_variables(2021, "acs5", cache = TRUE)
-write_csv(v21, './variable_namesv21.csv')
+write_csv(v21, './2_output/variable_namesv21.csv')
 zcta_ls <- unique(merged_data$ZCTA_str)
 ```
 
@@ -73,6 +72,6 @@ uhf_population_summary <- merged_with_pop %>%
   group_by(UHF_id) %>%
   summarise(total_population = sum(Population, na.rm = TRUE))
 
-write.csv(uhf_population_summary, file = "uhf_population_summary.csv", row.names = FALSE)
+write.csv(uhf_population_summary, file = "2_output/uhf_population_summary.csv", row.names = FALSE)
 ```
 

@@ -17,20 +17,20 @@ library(gridExtra)
 ## Merge datasets
 
 ```{r}
-unique_item <- read_csv("./1_3_dat_unique_item.csv") %>%
+unique_item <- read_csv("./0_prepare/1_3_dat_unique_item.csv") %>%
   select(1, 2, score) %>% # td_score
   mutate(zipcode = substr(zipcode, 1, 5),
          td_score = score) %>%
   select(-score)
 
-agency_scores <- read_csv("./agency_scores.csv") %>%
+agency_scores <- read_csv("./0_prepare/agency_scores.csv") %>%
   mutate(agency_scores = rowSums(select(., 2:19), na.rm = TRUE)) %>%
   select(1, agency_scores)
 
-dat_lossgain_scores <- read_csv("./dat_lossgain_scores.csv") %>%
+dat_lossgain_scores <- read_csv("./0_prepare/dat_lossgain_scores.csv") %>%
   select(1, 10)
 
-zipcode_uhf_mapping <- read_csv("./zipcode_uhf_mapping.csv") %>%
+zipcode_uhf_mapping <- read_csv("./0_prepare/zipcode_uhf_mapping.csv") %>%
   select(1, 3, 4) %>%
   mutate(zipcode = as.character(zip_code)) %>%
   select(-zip_code)
@@ -63,7 +63,7 @@ dat <- dat %>%
   select(ResponseId, zipcode, UHF_id, UHF_name, td_score, td_score_scaled,
          agency_scores, agency_scores_scaled, loss_aversion_scores, loss_aversion_scores_scaled)
 
-write_csv(dat, "dat_merged_1.csv")
+write_csv(dat, "./1_output/dat_merged_1.csv")
 ```
 
 ## Summarized to UHF scale
@@ -85,7 +85,7 @@ summary_data <- dat %>%
   ) %>%
   filter(ParticipantCount >= 15)
 
-write_csv(summary_data, "dat_merge_2_UHF>=15.csv")
+write_csv(summary_data, "./1_output/dat_merge_2_UHF>=15.csv")
 ```
 
 Note: total # of observation = 1211.

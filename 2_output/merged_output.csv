@@ -218,16 +218,36 @@
 "R_RlgXzVP30cCvT57",10009,10009,309,"Union Square - Lower East Side",11,68.75,20,76.47,3,50
 "R_25KGPn3dELBUH7S",10009,10009,309,"Union Square - Lower East Side",13,81.25,-26,8.82,3,50
 "R_qWNxJaVY6cRJ4LD",10009,10009,309,"Union Square - Lower East Side",11,68.75,18,73.53,5,83.33
+"R_3iQhftDXyMnZ8tu",10010,10010,307,"Gramercy Park - Murray Hill",11,68.75,6,55.88,5,83.33
+"R_2TFxFwjEVCngkfU",10010,10010,307,"Gramercy Park - Murray Hill",14,87.5,21,77.94,3,50
+"R_sNK95DAvALNkDEB",10010,10010,307,"Gramercy Park - Murray Hill",8,50,-15,25,3,50
+"R_AL4ai6o9obJHx5L",10010,10010,307,"Gramercy Park - Murray Hill",7,43.75,-1,45.59,5,83.33
 "R_1cVbpfX4YklHFTb",10011,10011,306,"Chelsea - Clinton",5,31.25,26,85.29,3,50
 "R_2CppLeFVRDgczfT",10011,10011,306,"Chelsea - Clinton",11,68.75,8,58.82,6,100
 "R_10DAV8YmqYSbWok",10011,10011,306,"Chelsea - Clinton",11,68.75,23,80.88,3,50
 "R_3huRhxWlESwXyJj",10011,10011,306,"Chelsea - Clinton",9,56.25,-4,41.18,0,0
 "R_3J9rOKUFchdlmDf",10011,10011,306,"Chelsea - Clinton",11,68.75,9,60.29,1,16.67
 "R_3h53BIIujDFd1u0",10011,10011,306,"Chelsea - Clinton",11,68.75,32,94.12,3,50
+"R_2Tq4LMd2pneZiWf",10012,10012,308,"Greenwich Village - SoHo",11,68.75,18,73.53,3,50
+"R_sNp2ldaKhjJfJn3",10012,10012,308,"Greenwich Village - SoHo",10,62.5,18,73.53,5,83.33
+"R_3e37v62QH7Z565U",10012,10012,308,"Greenwich Village - SoHo",9,56.25,15,69.12,3,50
+"R_2qgtpLK0fEPFu92",10012,10012,308,"Greenwich Village - SoHo",7,43.75,-2,44.12,4,66.67
+"R_2th77swP4Ro1kt5",10012,10012,308,"Greenwich Village - SoHo",11,68.75,23,80.88,3,50
+"R_1EcJIFcSyW0s8Of",10012,10012,308,"Greenwich Village - SoHo",15,93.75,22,79.41,2,33.33
+"R_3kHqDrJCjUrZmRm",10013,10013,308,"Greenwich Village - SoHo",16,100,22,79.41,4,66.67
+"R_25T2wVA3Qy8g2Id",10013,10013,308,"Greenwich Village - SoHo",10,62.5,20,76.47,3,50
+"R_1opqS5hEVQL2YjG",10014,10014,308,"Greenwich Village - SoHo",4,25,-12,29.41,6,100
+"R_30kSMmcXqZSn02m",10014,10014,308,"Greenwich Village - SoHo",16,100,29,89.71,4,66.67
+"R_22X2Y40eT2j1eVm",10014,10014,308,"Greenwich Village - SoHo",1,6.25,20,76.47,3,50
+"R_1iljyKMIqF0DOss",10014,10014,308,"Greenwich Village - SoHo",8,50,-15,25,6,100
+"R_2Ua5Uh0uSGlDs8c",10014,10014,308,"Greenwich Village - SoHo",9,56.25,22,79.41,4,66.67
 "R_1F8N3mWFMoosetQ",10018,10018,306,"Chelsea - Clinton",13,81.25,7,57.35,2,33.33
 "R_0qSdw7DniJSW4qR",10018,10018,306,"Chelsea - Clinton",15,93.75,24,82.35,5,83.33
 "R_qF6YuwKHLTkgCZ3",10019,10019,306,"Chelsea - Clinton",6,37.5,2,50,4,66.67
 "R_1BYtZhjRw1Xd2Ht",10020,10020,306,"Chelsea - Clinton",6,37.5,12,64.71,4,66.67
+"R_2aXjsefJKAqs5Xt",10021,10021,305,"Upper East Side",14,87.5,3,51.47,3,50
+"R_1eQ6c64U2rMWUqe",10021,10021,305,"Upper East Side",10,62.5,-13,27.94,3,50
+"R_3M5xwYDaGxcpJ8q",10021,10021,305,"Upper East Side",10,62.5,-9,33.82,2,33.33
 "R_1IvbZbNQTAjRq9Y",10023,10023,304,"Upper West Side",9,56.25,2,50,3,50
 "R_sUqALUxbF9JRJJv",10023,10023,304,"Upper West Side",11,68.75,13,66.18,3,50
 "R_tRsyTjVdldm8IU1",10023,10023,304,"Upper West Side",13,81.25,-8,35.29,5,83.33
@@ -369,6 +389,10 @@
 "R_1rqPPhxRdQz32Sm",10025,10025,304,"Upper West Side",11,68.75,13,66.18,2,33.33
 "R_1mgbJWb1yXgc4X9",10025,10025,304,"Upper West Side",8,50,19,75,4,66.67
 "R_2SdH30bypgtKBKO",10025,10025,304,"Upper West Side",11,68.75,10,61.76,4,66.67
+"R_1rjlDjcYAL56aHa",10026,10026,302,"Central Harlem - Morningside Heights",16,100,-6,38.24,5,83.33
+"R_eQldOYahetUb1Jf",10027,10027,302,"Central Harlem - Morningside Heights",7,43.75,25,83.82,5,83.33
+"R_3eyKlFJ4lbKLFEU",10027,10027,302,"Central Harlem - Morningside Heights",12,75,-14,26.47,2,33.33
+"R_2YgZv0gjLDbPJ4s",10028,10028,305,"Upper East Side",11,68.75,4,52.94,6,100
 "R_1mkO8LqudyRFYRU",10029,10029,303,"East Harlem",11,68.75,30,91.18,3,50
 "R_2rB1X6jGV9VsnCh",10029,10029,303,"East Harlem",16,100,15,69.12,5,83.33
 "R_1rJHxSuoaXmRq7Z",10029,10029,303,"East Harlem",11,68.75,30,91.18,6,100
@@ -477,6 +501,8 @@
 "R_3nH1iteDnSY6TwV",10029,10029,303,"East Harlem",14,87.5,34,97.06,3,50
 "R_3MyWkVWUiD4ocA6",10029,10029,303,"East Harlem",11,68.75,21,77.94,6,100
 "R_3KxUhsKIeSAGwh2",10029,10029,303,"East Harlem",11,68.75,30,91.18,2,33.33
+"R_2f7JDdm5bxQuALM",10030,10030,302,"Central Harlem - Morningside Heights",13,81.25,18,73.53,4,66.67
+"R_3JlSdUiWM35jyNe",10030,10030,302,"Central Harlem - Morningside Heights",13,81.25,6,55.88,5,83.33
 "R_3s08k6nfBHHwe0x",10032,10032,301,"Washington Heights",9,56.25,18,73.53,3,50
 "R_5lQQNvecWLpoVBe",10032,10032,301,"Washington Heights",4,25,-8,35.29,3,50
 "R_65mc4QbroUnu8Xn",10032,10032,301,"Washington Heights",7,43.75,16,70.59,4,66.67
@@ -490,17 +516,26 @@
 "R_3B0CvAWYoiOf3gJ",10032,10032,301,"Washington Heights",16,100,6,55.88,4,66.67
 "R_8CdOnqKp4sQNFxD",10033,10033,301,"Washington Heights",10,62.5,5,54.41,6,100
 "R_1NwEgRm6nKg3i3j",10035,10035,303,"East Harlem",11,68.75,7,57.35,3,50
+"R_3CIoNf1yFkcVqz9",10037,10037,302,"Central Harlem - Morningside Heights",8,50,6,55.88,2,33.33
 "R_3jSQ4YINwFBD7iK",10039,10039,301,"Washington Heights",13,81.25,13,66.18,6,100
 "R_3HuXYEaneXpOMxY",10040,10040,301,"Washington Heights",16,100,10,61.76,5,83.33
 "R_cVhuSZvTBo4P54d",10040,10040,301,"Washington Heights",15,93.75,14,67.65,5,83.33
 "R_tErjkCloDaLXD9v",10040,10040,301,"Washington Heights",12,75,14,67.65,4,66.67
 "R_1KjUxMUeaoaLI6p",10040,10040,301,"Washington Heights",12,75,-13,27.94,5,83.33
 "R_5uWdLfrawHL5ZcZ",10040,10040,301,"Washington Heights",10,62.5,16,70.59,4,66.67
+"R_12KCIbmrlTj2PdA",10044,10044,305,"Upper East Side",5,31.25,5,54.41,6,100
+"R_1LMrgNFUQJcdYs9",10065,10065,305,"Upper East Side",16,100,32,94.12,2,33.33
 "R_3fxhQdmBnlUFBRv",10069,10069,304,"Upper West Side",8,50,-1,45.59,5,83.33
 "R_D8mYwrE56k4aRdn",10103,10103,306,"Chelsea - Clinton",13,81.25,-14,26.47,2,33.33
 "R_262NskGMiVvJ81X",10111,10111,306,"Chelsea - Clinton",10,62.5,27,86.76,3,50
 "R_3Hwfq0I9Lwx3Iy3",10111,10111,306,"Chelsea - Clinton",7,43.75,17,72.06,4,66.67
 "R_2eRwlT9xtJNf3xP",10112,10112,306,"Chelsea - Clinton",6,37.5,10,61.76,2,33.33
+"R_2UixsudjdDfVwnC",10115,10115,302,"Central Harlem - Morningside Heights",9,56.25,7,57.35,4,66.67
+"R_2U5w2z3yNTyRaQj",10128,10128,305,"Upper East Side",9,56.25,21,77.94,4,66.67
+"R_3gUb1sRrbqPY6AE",10152,10152,307,"Gramercy Park - Murray Hill",11,68.75,32,94.12,5,83.33
+"R_a4OiWkd9S3aktH3",10162,10162,305,"Upper East Side",8,50,27,86.76,3,50
+"R_ABzKx8sdl5MJXIR",10169,10169,307,"Gramercy Park - Murray Hill",11,68.75,-6,38.24,2,33.33
+"R_3Kwq2FVUbi7FIRX",10170,10170,307,"Gramercy Park - Murray Hill",10,62.5,27,86.76,1,16.67
 "R_UQlTzUMxnYiHabD",10271,10271,310,"Lower Manhattan",15,93.75,32,94.12,4,66.67
 "R_3Di4Ed7SUkre4Ez",10279,10279,310,"Lower Manhattan",8,50,16,70.59,3,50
 "R_vTXUhLbqEbmym9b",10282,10282,310,"Lower Manhattan",9,56.25,6,55.88,1,16.67
@@ -559,8 +594,17 @@
 "R_vAhBgCfVo5Arjgd",10304,10304,502,"Stapleton - St. George",8,50,13,66.18,1,16.67
 "R_1oaJOMjloGgxgAE",10304,10304,502,"Stapleton - St. George",10,62.5,0,47.06,2,33.33
 "R_33jAiV0NnaqMVcG",10305,10305,502,"Stapleton - St. George",11,68.75,10,61.76,5,83.33
+"R_2QlecwgU0nnqCls",10306,10306,504,"South Beach - Tottenville",4,25,27,86.76,2,33.33
 "R_3UCZeLuCYsOTuFP",10310,10310,501,"Port Richmond",9,56.25,-3,42.65,5,83.33
 "R_3flSP8C9z8sT5uQ",10310,10310,501,"Port Richmond",10,62.5,28,88.24,3,50
+"R_3scASAlajhXmWXz",10311,10311,503,"Willowbrook",11,68.75,25,83.82,2,33.33
+"R_2e81UIoJnlyYxOP",10312,10312,504,"South Beach - Tottenville",13,81.25,8,58.82,4,66.67
+"R_2zRZv55C230Zgdl",10312,10312,504,"South Beach - Tottenville",10,62.5,7,57.35,3,50
+"R_3szhHuugPeFxgDL",10314,10314,503,"Willowbrook",15,93.75,-3,42.65,5,83.33
+"R_2qxGf5kJEiEM69c",10452,10452,106,"High Bridge - Morrisania",6,37.5,29,89.71,3,50
+"R_etYBYwDjBV9jy1z",10452,10452,106,"High Bridge - Morrisania",0,0,8,58.82,5,83.33
+"R_1dyPcnmVzi3tCU1",10452,10452,106,"High Bridge - Morrisania",11,68.75,8,58.82,3,50
+"R_CfvlyFz4li7Pkm5",10452,10452,106,"High Bridge - Morrisania",16,100,-16,23.53,6,100
 "R_7TLirvRNV7w30Qx",10453,10453,105,"Crotona -Tremont",16,100,2,50,6,100
 "R_3QMEUW1WjBh61b5",10453,10453,105,"Crotona -Tremont",15,93.75,12,64.71,1,16.67
 "R_1dufweLFMGHzUka",10453,10453,105,"Crotona -Tremont",6,37.5,4,52.94,3,50
@@ -634,13 +678,37 @@
 "R_3McHL6Yb0teR8fr",10453,10453,105,"Crotona -Tremont",11,68.75,-11,30.88,4,66.67
 "R_1DS7lGBEaPw4LSc",10453,10453,105,"Crotona -Tremont",15,93.75,16,70.59,3,50
 "R_3Dubg2dz8602F1h",10453,10453,105,"Crotona -Tremont",10,62.5,21,77.94,3,50
+"R_2XmPd6n3G93zkfs",10454,10454,107,"Hunts Point - Mott Haven",12,75,8,58.82,5,83.33
+"R_324sp3cRIwADOxY",10455,10455,107,"Hunts Point - Mott Haven",14,87.5,20,76.47,3,50
+"R_116jsJUqL1nNS5l",10455,10455,107,"Hunts Point - Mott Haven",11,68.75,24,82.35,3,50
+"R_sdIZhkKi6oRMyM9",10455,10455,107,"Hunts Point - Mott Haven",11,68.75,24,82.35,3,50
+"R_2zFTWTnfE6A2gnP",10456,10456,106,"High Bridge - Morrisania",16,100,10,61.76,3,50
+"R_ZK4lpmwZHVoxBdL",10456,10456,106,"High Bridge - Morrisania",11,68.75,-4,41.18,1,16.67
+"R_1qgHxHYg1qeZl2J",10456,10456,106,"High Bridge - Morrisania",6,37.5,-14,26.47,4,66.67
 "R_1g1quC9XhI8kzKS",10457,10457,105,"Crotona -Tremont",11,68.75,26,85.29,3,50
 "R_cAsonX6uy9x2yiZ",10457,10457,105,"Crotona -Tremont",16,100,-8,35.29,6,100
 "R_25zn4G5zwHYjFNi",10457,10457,105,"Crotona -Tremont",16,100,5,54.41,2,33.33
+"R_1QAtwJRZy4ZSCXV",10458,10458,103,"Fordham - Bronx Pk",11,68.75,10,61.76,3,50
+"R_1mws3j1hzuQUA76",10458,10458,103,"Fordham - Bronx Pk",9,56.25,8,58.82,5,83.33
+"R_1JVZr4f3f2UXE88",10459,10459,107,"Hunts Point - Mott Haven",11,68.75,2,50,3,50
 "R_Wc8K0bTS0tc5SI9",10461,10461,104,"Pelham - Throgs Neck",6,37.5,28,88.24,3,50
 "R_bgwXLZYB1wtCO9H",10462,10462,104,"Pelham - Throgs Neck",8,50,16,70.59,3,50
 "R_2dpdumix6KOI79U",10462,10462,104,"Pelham - Throgs Neck",11,68.75,29,89.71,3,50
+"R_2qdrLCsvHqjDXsM",10463,10463,101,"Kingsbridge - Riverdale",9,56.25,22,79.41,5,83.33
+"R_1dmCxdgd10xAX7z",10463,10463,101,"Kingsbridge - Riverdale",11,68.75,2,50,6,100
 "R_1LbQF7ATY2gWzyV",10464,10464,104,"Pelham - Throgs Neck",11,68.75,26,85.29,4,66.67
+"R_3CBJHdZ5xRLzpOX",10466,10466,102,"Northeast Bronx",11,68.75,20,76.47,6,100
+"R_21ynuwPr1RcI9Vo",10466,10466,102,"Northeast Bronx",7,43.75,20,76.47,4,66.67
+"R_1q8x5YolwJR8Nzq",10467,10467,103,"Fordham - Bronx Pk",9,56.25,6,55.88,5,83.33
+"R_T7NVVPuF78BQEVz",10467,10467,103,"Fordham - Bronx Pk",13,81.25,9,60.29,3,50
+"R_1DAUiTWRzy7PCy7",10467,10467,103,"Fordham - Bronx Pk",10,62.5,20,76.47,3,50
+"R_26fMwTK5OkgKp4d",10467,10467,103,"Fordham - Bronx Pk",10,62.5,8,58.82,2,33.33
+"R_3HXG8uXtiS6jwjK",10467,10467,103,"Fordham - Bronx Pk",11,68.75,23,80.88,4,66.67
+"R_1N5sIr8HSoZd8Fk",10468,10468,103,"Fordham - Bronx Pk",8,50,24,82.35,3,50
+"R_1lABqJBTBG88y7k",10468,10468,103,"Fordham - Bronx Pk",12,75,4,52.94,3,50
+"R_1Ow3p2I6i1EoDnQ",10469,10469,102,"Northeast Bronx",11,68.75,6,55.88,0,0
+"R_22tTlf1uHcOVHYN",10469,10469,102,"Northeast Bronx",9,56.25,8,58.82,2,33.33
+"R_3RgqWpbXacWhzaQ",10470,10470,103,"Fordham - Bronx Pk",8,50,13,66.18,4,66.67
 "R_QnoK6z0QCX2eIsV",10472,10472,104,"Pelham - Throgs Neck",11,68.75,28,88.24,3,50
 "R_Q0QMzlGa3PWVf0d",10472,10472,104,"Pelham - Throgs Neck",6,37.5,28,88.24,1,16.67
 "R_3hGvvcJgO9QlCKV",10473,10473,104,"Pelham - Throgs Neck",16,100,15,69.12,2,33.33
@@ -709,6 +777,10 @@
 "R_331HC0BAFGsBELO",10473,10473,104,"Pelham - Throgs Neck",13,81.25,8,58.82,5,83.33
 "R_1hLsYkjPudThDtj",10473,10473,104,"Pelham - Throgs Neck",13,81.25,4,52.94,5,83.33
 "R_WoLDZBz8OEDPPdT",10473,10473,104,"Pelham - Throgs Neck",10,62.5,30,91.18,3,50
+"R_STRW3bHh5HUpFnP",10474,10474,107,"Hunts Point - Mott Haven",10,62.5,6,55.88,4,66.67
+"R_2VJjwW9peDTQEHk",10475,10475,102,"Northeast Bronx",8,50,1,48.53,2,33.33
+"R_51MBXWGAVafiTpT",10475,10475,102,"Northeast Bronx",11,68.75,3,51.47,5,83.33
+"R_SNqBraePn9yKBxv",10475,10475,102,"Northeast Bronx",4,25,11,63.24,2,33.33
 "R_yqenkm3PqxoVRBv",11101,11101,401,"Long Island City - Astoria",5,31.25,-1,45.59,2,33.33
 "R_Q4lTLcWhl89Yi3f",11101,11101,401,"Long Island City - Astoria",10,62.5,25,83.82,4,66.67
 "R_zezjsbWr61HVFNT",11101,11101,401,"Long Island City - Astoria",11,68.75,6,55.88,5,83.33
@@ -748,6 +820,7 @@
 "R_1fcFNKFElfwCQWQ",11104,11104,401,"Long Island City - Astoria",11,68.75,6,55.88,1,16.67
 "R_6GbMYwUL0SqOmCB",11106,11106,401,"Long Island City - Astoria",16,100,8,58.82,5,83.33
 "R_V3bHKLUH8qH11eN",11109,11109,401,"Long Island City - Astoria",13,81.25,24,82.35,1,16.67
+"R_2ByBwMmm19qiy7M",11201,11201,202,"Downtown - Heights - Slope",5,31.25,27,86.76,3,50
 "R_3KVZsgKjRiCoC1o",11203,11203,207,"East Flatbush - Flatbush",10,62.5,27,86.76,4,66.67
 "R_2wayh9Z5LDWMaHK",11203,11203,207,"East Flatbush - Flatbush",11,68.75,-25,10.29,1,16.67
 "R_2c17u1TBa8R1LEE",11203,11203,207,"East Flatbush - Flatbush",11,68.75,27,86.76,5,83.33
@@ -829,9 +902,38 @@
 "R_2TAlBbHzy2CR1Wa",11206,11206,211,"Williamsburg - Bushwick",11,68.75,27,86.76,2,33.33
 "R_1CEzZwRf50eQTmE",11206,11206,211,"Williamsburg - Bushwick",5,31.25,14,67.65,3,50
 "R_1GNTRImz8S0b2K6",11206,11206,211,"Williamsburg - Bushwick",9,56.25,11,63.24,2,33.33
+"R_d69HmrgF8HTXHS9",11207,11207,204,"East New York",6,37.5,28,88.24,3,50
+"R_1eS1dAVNeO8b3En",11207,11207,204,"East New York",8,50,32,94.12,2,33.33
+"R_1IEtGXYYXLjjAGA",11207,11207,204,"East New York",9,56.25,12,64.71,3,50
+"R_T0khiml8iO23LmF",11207,11207,204,"East New York",8,50,-2,44.12,3,50
+"R_3P3EFirkXqQS8KJ",11207,11207,204,"East New York",11,68.75,21,77.94,3,50
+"R_240M2IcGESCWVQc",11207,11207,204,"East New York",7,43.75,13,66.18,5,83.33
+"R_3Ia7CdK9TLuBNo7",11208,11208,204,"East New York",16,100,4,52.94,4,66.67
+"R_25ZrgCAF8eKFiUw",11208,11208,204,"East New York",8,50,14,67.65,2,33.33
+"R_2v5O2tg7qMZ6PuI",11208,11208,204,"East New York",11,68.75,15,69.12,5,83.33
+"R_1DouVpgZJ9NLHps",11209,11209,209,"Bensonhurst - Bay Ridge",11,68.75,12,64.71,3,50
+"R_DAGOjeGqNsGqPxD",11209,11209,209,"Bensonhurst - Bay Ridge",4,25,6,55.88,4,66.67
+"R_3ManUcvTA4jpag9",11209,11209,209,"Bensonhurst - Bay Ridge",3,18.75,8,58.82,3,50
+"R_3pAAVwfaBdBboY1",11209,11209,209,"Bensonhurst - Bay Ridge",7,43.75,0,47.06,5,83.33
+"R_p5WOGm2vvHeaeVb",11209,11209,209,"Bensonhurst - Bay Ridge",10,62.5,11,63.24,3,50
+"R_299UAIIFfxnPL4V",11209,11209,209,"Bensonhurst - Bay Ridge",7,43.75,23,80.88,1,16.67
 "R_26fG8Dk1HewQwso",11210,11210,207,"East Flatbush - Flatbush",8,50,9,60.29,6,100
 "R_3OdJGIKhshtWpIT",11210,11210,207,"East Flatbush - Flatbush",10,62.5,-16,23.53,5,83.33
 "R_2PnxXN4otM2YJRk",11210,11210,207,"East Flatbush - Flatbush",8,50,-2,44.12,1,16.67
+"R_110dNr5YUosmacM",11212,11212,203,"Bedford Stuyvesant - Crown Heights",7,43.75,-19,19.12,6,100
+"R_CmilQu95T8j8Gjf",11212,11212,203,"Bedford Stuyvesant - Crown Heights",11,68.75,-5,39.71,3,50
+"R_3NKYq0L16m7wzbM",11213,11213,203,"Bedford Stuyvesant - Crown Heights",13,81.25,12,64.71,5,83.33
+"R_2qxhGt39SN9FVJA",11213,11213,203,"Bedford Stuyvesant - Crown Heights",9,56.25,4,52.94,4,66.67
+"R_3hmOAIbHCAjoeoe",11215,11215,202,"Downtown - Heights - Slope",13,81.25,10,61.76,6,100
+"R_2P80p39c5fCeAEj",11216,11216,203,"Bedford Stuyvesant - Crown Heights",13,81.25,19,75,5,83.33
+"R_XUqfC60O2br7izD",11216,11216,203,"Bedford Stuyvesant - Crown Heights",11,68.75,20,76.47,4,66.67
+"R_3j2PQJKBVxZXCKt",11216,11216,203,"Bedford Stuyvesant - Crown Heights",11,68.75,16,70.59,3,50
+"R_0SZFpfpC6O5HFjb",11217,11217,202,"Downtown - Heights - Slope",10,62.5,26,85.29,6,100
+"R_2QJSuXrA5GOiI7I",11217,11217,202,"Downtown - Heights - Slope",7,43.75,17,72.06,4,66.67
+"R_RekNgcqZMMBHLX3",11217,11217,202,"Downtown - Heights - Slope",16,100,32,94.12,6,100
+"R_10C1pfKQPbC7CSZ",11217,11217,202,"Downtown - Heights - Slope",16,100,18,73.53,6,100
+"R_3isvbZLgF86OqlS",11218,11218,206,"Borough Park",11,68.75,6,55.88,5,83.33
+"R_1DCMdeGo0127i06",11218,11218,206,"Borough Park",10,62.5,-15,25,3,50
 "R_b1NGURrjgMrZyzT",11220,11220,205,"Sunset Park",4,25,21,77.94,3,50
 "R_1Xq9kX4zsWLrSCt",11220,11220,205,"Sunset Park",16,100,16,70.59,3,50
 "R_3dVUQhF334zZr8K",11220,11220,205,"Sunset Park",11,68.75,6,55.88,5,83.33
@@ -892,6 +994,10 @@
 "R_3q8SdU0mvrrXKOH",11221,11221,211,"Williamsburg - Bushwick",11,68.75,20,76.47,5,83.33
 "R_128TzfXaKjD8Vgj",11221,11221,211,"Williamsburg - Bushwick",12,75,-1,45.59,3,50
 "R_2xPqPOMbSUrhO1y",11221,11221,211,"Williamsburg - Bushwick",14,87.5,2,50,5,83.33
+"R_3fHO9vMi5v2Jy1E",11222,11222,201,"Greenpoint",14,87.5,-12,29.41,4,66.67
+"R_eW3tL3lmGPjrYl3",11223,11223,210,"Coney Island - Sheepshead Bay",8,50,15,69.12,3,50
+"R_32UPcvem08DwMFh",11223,11223,210,"Coney Island - Sheepshead Bay",11,68.75,8,58.82,3,50
+"R_3qr4td06HNgOXaO",11224,11224,210,"Coney Island - Sheepshead Bay",11,68.75,19,75,4,66.67
 "R_8Gp7qu70UNqnWwh",11225,11225,207,"East Flatbush - Flatbush",11,68.75,31,92.65,5,83.33
 "R_3R4lvUvjbwswaBh",11225,11225,207,"East Flatbush - Flatbush",6,37.5,16,70.59,0,0
 "R_WdKZtpXdAdiPesp",11225,11225,207,"East Flatbush - Flatbush",11,68.75,-18,20.59,2,33.33
@@ -988,6 +1094,13 @@
 "R_6WjBajBZvJVqJyN",11226,11226,207,"East Flatbush - Flatbush",11,68.75,11,63.24,4,66.67
 "R_3pcoSteuZuebUG2",11226,11226,207,"East Flatbush - Flatbush",11,68.75,1,48.53,3,50
 "R_1lizr0M9rvCIPL4",11226,11226,207,"East Flatbush - Flatbush",5,31.25,23,80.88,5,83.33
+"R_1d4x8Dyify3EQX8",11228,11228,209,"Bensonhurst - Bay Ridge",10,62.5,0,47.06,4,66.67
+"R_2wTVgpK4hrxte7k",11228,11228,209,"Bensonhurst - Bay Ridge",13,81.25,4,52.94,3,50
+"R_5oiPaaPXXMaDvKV",11229,11229,210,"Coney Island - Sheepshead Bay",11,68.75,21,77.94,1,16.67
+"R_T8fVSWHOvW88S7T",11229,11229,210,"Coney Island - Sheepshead Bay",13,81.25,-1,45.59,6,100
+"R_1IFW41x8wppb8hI",11230,11230,206,"Borough Park",9,56.25,20,76.47,2,33.33
+"R_cMbKOr2zYVRvytX",11231,11231,202,"Downtown - Heights - Slope",13,81.25,35,98.53,4,66.67
+"R_1pQm0Hiba6aDrRZ",11231,11231,202,"Downtown - Heights - Slope",14,87.5,26,85.29,3,50
 "R_6tUuxYTGSf4jCaR",11232,11232,205,"Sunset Park",9,56.25,24,82.35,3,50
 "R_31A7BM2Kt8QlAnZ",11234,11234,208,"Canarsie - Flatlands",5,31.25,-15,25,2,33.33
 "R_3MSyfKG0UDU11Fp",11234,11234,208,"Canarsie - Flatlands",10,62.5,6,55.88,5,83.33
@@ -1088,6 +1201,8 @@
 "R_vDD0CACZrR0TTbj",11234,11234,208,"Canarsie - Flatlands",11,68.75,4,52.94,6,100
 "R_2zD4Gvj8TpjTUYa",11234,11234,208,"Canarsie - Flatlands",16,100,16,70.59,5,83.33
 "R_2Yn4WEp7kXxQgDm",11234,11234,208,"Canarsie - Flatlands",15,93.75,10,61.76,5,83.33
+"R_1LpLad2qibkK465",11235,11235,210,"Coney Island - Sheepshead Bay",3,18.75,10,61.76,3,50
+"R_1zQa0sNkAyazUXf",11235,11235,210,"Coney Island - Sheepshead Bay",7,43.75,-11,30.88,2,33.33
 "R_WDJm2JEXqhH4HXr",11236,11236,208,"Canarsie - Flatlands",16,100,20,76.47,6,100
 "R_3iO0xidoChjVP12",11236,11236,208,"Canarsie - Flatlands",10,62.5,1,48.53,4,66.67
 "R_2rvWSzXsvbLrrdc",11236,11236,208,"Canarsie - Flatlands",8,50,20,76.47,6,100
@@ -1095,8 +1210,15 @@
 "R_82GsPW151ikcfAJ",11236,11236,208,"Canarsie - Flatlands",9,56.25,0,47.06,3,50
 "R_1MSQ8FFC6BOm1b8",11236,11236,208,"Canarsie - Flatlands",11,68.75,10,61.76,3,50
 "R_3gUBaHRYibbVr8l",11237,11237,211,"Williamsburg - Bushwick",9,56.25,2,50,6,100
+"R_bkib1DkVJN6NHm9",11238,11238,203,"Bedford Stuyvesant - Crown Heights",12,75,18,73.53,4,66.67
+"R_2WvCewejHHwr7pT",11238,11238,203,"Bedford Stuyvesant - Crown Heights",16,100,3,51.47,4,66.67
+"R_A6aki09GwBTy6Up",11238,11238,203,"Bedford Stuyvesant - Crown Heights",10,62.5,21,77.94,3,50
 "R_2QEeRxbp8otK7M7",11239,11239,208,"Canarsie - Flatlands",7,43.75,25,83.82,5,83.33
 "R_AmS1Y9XerPsx3i1",11239,11239,208,"Canarsie - Flatlands",16,100,27,86.76,5,83.33
+"R_3Gd0ryI8dLFPgLJ",11351,11351,403,"Flushing - Clearview",7,43.75,7,57.35,3,50
+"R_3FOtENDZf64CSwM",11367,11367,406,"Fresh Meadows",14,87.5,-13,27.94,4,66.67
+"R_1QuOp3zBoctNGJn",11373,11373,402,"West Queens",11,68.75,5,54.41,5,83.33
+"R_yNFZe5ov1VCjBDj",11373,11373,402,"West Queens",4,25,9,60.29,3,50
 "R_3PuBIv4x6v7ouMK",11374,11374,405,"Ridgewood - Forest Hills",8,50,14,67.65,3,50
 "R_5hVJJQenwUYCz7P",11374,11374,405,"Ridgewood - Forest Hills",11,68.75,-3,42.65,3,50
 "R_2S66Zam21BOVGv5",11375,11375,405,"Ridgewood - Forest Hills",12,75,11,63.24,1,16.67
@@ -1139,6 +1261,7 @@
 "R_3rGqR9RNh51bLMs",11375,11375,405,"Ridgewood - Forest Hills",11,68.75,3,51.47,6,100
 "R_2tpHrW2ff5gbBQd",11375,11375,405,"Ridgewood - Forest Hills",1,6.25,11,63.24,3,50
 "R_1MScr8w6t0jgcHx",11375,11375,405,"Ridgewood - Forest Hills",7,43.75,0,47.06,4,66.67
+"R_2fqx96HZiUKOUFO",11377,11377,402,"West Queens",7,43.75,3,51.47,4,66.67
 "R_tPwuSvEx4eEK4M1",11385,11385,405,"Ridgewood - Forest Hills",6,37.5,12,64.71,4,66.67
 "R_eG9wrTFqDEa3CzD",11412,11412,408,"Jamaica",11,68.75,-2,44.12,3,50
 "R_3kM14PGBCt2fOvf",11412,11412,408,"Jamaica",7,43.75,2,50,4,66.67
@@ -1166,7 +1289,10 @@
 "R_2P7JjaBKMS1Buai",11420,11420,407,"Southwest Queens",15,93.75,0,47.06,2,33.33
 "R_1FmF558sXfo7lqc",11420,11420,407,"Southwest Queens",16,100,3,51.47,4,66.67
 "R_VJ6n2yLV5bmX2aB",11420,11420,407,"Southwest Queens",13,81.25,21,77.94,5,83.33
+"R_2b3jXiEsHpVSdId",11422,11422,409,"Southeast Queens",15,93.75,-8,35.29,5,83.33
 "R_3O0OgYPTnXaaFOu",11423,11423,408,"Jamaica",16,100,4,52.94,3,50
+"R_3sYYUtT83xp9qtH",11427,11427,409,"Southeast Queens",14,87.5,13,66.18,2,33.33
+"R_1DYiSPJHC4FyBOb",11428,11428,409,"Southeast Queens",11,68.75,-6,38.24,5,83.33
 "R_29b87q9MRovGltm",11433,11433,408,"Jamaica",11,68.75,6,55.88,5,83.33
 "R_1Cd9YU1Rbz4rMA4",11433,11433,408,"Jamaica",11,68.75,11,63.24,2,33.33
 "R_31ugHMGWElFVTk9",11433,11433,408,"Jamaica",5,31.25,4,52.94,3,50
@@ -1210,3 +1336,10 @@
 "R_3D2e0rapQOEEPzm",11435,11435,408,"Jamaica",15,93.75,18,73.53,6,100
 "R_2yadVwRlXij7E1D",11435,11435,408,"Jamaica",1,6.25,14,67.65,5,83.33
 "R_5t1Pya5oCD3DJpD",11436,11436,408,"Jamaica",13,81.25,-3,42.65,5,83.33
+"R_RFgywfbDgM4dGqR",11691,11691,410,"Rockaways",8,50,16,70.59,6,100
+"R_1LBeyeBINnWGqOk",11692,11692,410,"Rockaways",9,56.25,10,61.76,4,66.67
+"R_1kGlo3TFvLc0POe",11692,11692,410,"Rockaways",10,62.5,21,77.94,2,33.33
+"R_2BqVtxlVhSlmV6m",11692,11692,410,"Rockaways",9,56.25,1,48.53,3,50
+"R_1HsH8Q5UwLFRKEh",11692,11692,410,"Rockaways",11,68.75,-3,42.65,2,33.33
+"R_0cy5qgo5k6XgQ7f",11694,11694,410,"Rockaways",6,37.5,16,70.59,5,83.33
+"R_2EAykKmf5yjxzHC",11694,11694,410,"Rockaways",9,56.25,-5,39.71,5,83.33

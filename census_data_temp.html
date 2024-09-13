@@ -384,26 +384,26 @@ library(tidyverse)</code></pre>
 ## 
 ##     transpose</code></pre>
 <pre class="r"><code>library(dplyr)</code></pre>
-<div id="merge-three-levels-and-filter-uhf-15" class="section level1">
-<h1>Merge three levels and filter UHF &gt; 15</h1>
-<p>Note: The observation changes from 1344 to 1211 after filtering.</p>
-<pre class="r"><code>dat_merged_1 &lt;- read.csv(&quot;./dat_merged_1.csv&quot;)
-modzcta_zip_counts &lt;- read.csv(&quot;./modzcta_zip_counts.csv&quot;)
-uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
+<div id="merge-three-levels" class="section level1">
+<h1>Merge three levels</h1>
+<pre class="r"><code>dat_merged_1 &lt;- read.csv(&quot;./1_output/dat_merged_1.csv&quot;)
+modzcta_zip_counts &lt;- read.csv(&quot;./0_prepare/modzcta_zip_counts.csv&quot;)
+# filter
+# uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
 
 merged_data &lt;- merge(dat_merged_1, modzcta_zip_counts[, c(&quot;ZCTA_str&quot;, &quot;zip_code&quot;)], 
                      by.x = &quot;zipcode&quot;, by.y = &quot;zip_code&quot;, all.x = TRUE) %&gt;%
-  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything()) %&gt;%
-  filter(UHF_id %in% uhf_ids)
+  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything())
+  # filter(UHF_id %in% uhf_ids)
 
-write.csv(merged_data, file = &quot;merged_output.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(merged_data, file = &quot;2_output/merged_output.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 <div id="download-data" class="section level1">
 <h1>Download Data</h1>
 <pre class="r"><code>census_api_key(&quot;919b37e63df029d1420900f893770f49d4a03226&quot;)</code></pre>
 <pre><code>## To install your API key for use in future sessions, run this function with `install = TRUE`.</code></pre>
 <pre class="r"><code>v21 &lt;- load_variables(2021, &quot;acs5&quot;, cache = TRUE)
-write_csv(v21, &#39;./variable_namesv21.csv&#39;)
+write_csv(v21, &#39;./2_output/variable_namesv21.csv&#39;)
 zcta_ls &lt;- unique(merged_data$ZCTA_str)</code></pre>
 <div id="population" class="section level2">
 <h2>Population</h2>
@@ -439,7 +439,7 @@ uhf_population_summary &lt;- merged_with_pop %&gt;%
   group_by(UHF_id) %&gt;%
   summarise(total_population = sum(Population, na.rm = TRUE))
 
-write.csv(uhf_population_summary, file = &quot;uhf_population_summary.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(uhf_population_summary, file = &quot;2_output/uhf_population_summary.csv&quot;, row.names = FALSE)</code></pre>
 </div>
 </div>
 

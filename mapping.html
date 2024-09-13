@@ -11,7 +11,7 @@
 
 <meta name="author" content="Huanyu Chen" />
 
-<meta name="date" content="2024-09-05" />
+<meta name="date" content="2024-09-13" />
 
 <title>Mapping Scores with Participant IDs into UHF</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Mapping Scores with Participant IDs into
 UHF</h1>
 <h4 class="author">Huanyu Chen</h4>
-<h4 class="date">2024-09-05</h4>
+<h4 class="date">2024-09-13</h4>
 
 </div>
 
@@ -379,7 +379,7 @@ library(gridExtra)</code></pre>
 <h1>Data Pre-processing</h1>
 <div id="merge-datasets" class="section level2">
 <h2>Merge datasets</h2>
-<pre class="r"><code>unique_item &lt;- read_csv(&quot;./1_3_dat_unique_item.csv&quot;) %&gt;%
+<pre class="r"><code>unique_item &lt;- read_csv(&quot;./0_prepare/1_3_dat_unique_item.csv&quot;) %&gt;%
   select(1, 2, score) %&gt;% # td_score
   mutate(zipcode = substr(zipcode, 1, 5),
          td_score = score) %&gt;%
@@ -392,7 +392,7 @@ library(gridExtra)</code></pre>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>agency_scores &lt;- read_csv(&quot;./agency_scores.csv&quot;) %&gt;%
+<pre class="r"><code>agency_scores &lt;- read_csv(&quot;./0_prepare/agency_scores.csv&quot;) %&gt;%
   mutate(agency_scores = rowSums(select(., 2:19), na.rm = TRUE)) %&gt;%
   select(1, agency_scores)</code></pre>
 <pre><code>## Rows: 1344 Columns: 19
@@ -403,7 +403,7 @@ library(gridExtra)</code></pre>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>dat_lossgain_scores &lt;- read_csv(&quot;./dat_lossgain_scores.csv&quot;) %&gt;%
+<pre class="r"><code>dat_lossgain_scores &lt;- read_csv(&quot;./0_prepare/dat_lossgain_scores.csv&quot;) %&gt;%
   select(1, 10)</code></pre>
 <pre><code>## Rows: 1348 Columns: 10
 ## ── Column specification ────────────────────────────────────────────────────────
@@ -413,7 +413,7 @@ library(gridExtra)</code></pre>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>zipcode_uhf_mapping &lt;- read_csv(&quot;./zipcode_uhf_mapping.csv&quot;) %&gt;%
+<pre class="r"><code>zipcode_uhf_mapping &lt;- read_csv(&quot;./0_prepare/zipcode_uhf_mapping.csv&quot;) %&gt;%
   select(1, 3, 4) %&gt;%
   mutate(zipcode = as.character(zip_code)) %&gt;%
   select(-zip_code)</code></pre>
@@ -451,7 +451,7 @@ dat &lt;- dat %&gt;%
   select(ResponseId, zipcode, UHF_id, UHF_name, td_score, td_score_scaled,
          agency_scores, agency_scores_scaled, loss_aversion_scores, loss_aversion_scores_scaled)
 
-write_csv(dat, &quot;dat_merged_1.csv&quot;)</code></pre>
+write_csv(dat, &quot;./1_output/dat_merged_1.csv&quot;)</code></pre>
 </div>
 <div id="summarized-to-uhf-scale" class="section level2">
 <h2>Summarized to UHF scale</h2>
@@ -471,7 +471,7 @@ write_csv(dat, &quot;dat_merged_1.csv&quot;)</code></pre>
   ) %&gt;%
   filter(ParticipantCount &gt;= 15)
 
-write_csv(summary_data, &quot;dat_merge_2_UHF&gt;=15.csv&quot;)</code></pre>
+write_csv(summary_data, &quot;./1_output/dat_merge_2_UHF&gt;=15.csv&quot;)</code></pre>
 <p>Note: total # of observation = 1211.</p>
 </div>
 </div>
