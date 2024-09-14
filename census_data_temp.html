@@ -602,66 +602,56 @@ uhf_summary &lt;- merged %&gt;%
 </div>
 <div id="age" class="section level1">
 <h1>Age</h1>
+<div id="under-25" class="section level2">
+<h2>Under 25</h2>
 <pre class="r"><code>ageunder25_groups &lt;- c(
-  # Group 1
+  &#39;B01001A_003&#39;, &#39;B01001A_018&#39;,
   &#39;B01001B_003&#39;, &#39;B01001B_018&#39;,
   &#39;B01001C_003&#39;, &#39;B01001C_018&#39;,
   &#39;B01001D_003&#39;, &#39;B01001D_018&#39;,
   &#39;B01001E_003&#39;, &#39;B01001E_018&#39;,
   &#39;B01001F_003&#39;, &#39;B01001F_018&#39;,
   &#39;B01001G_003&#39;, &#39;B01001G_018&#39;,
-  &#39;B01001H_003&#39;, &#39;B01001H_018&#39;,
-  &#39;B01001I_003&#39;, &#39;B01001I_018&#39;,
   
-  # Group 2
+  &#39;B01001A_004&#39;, &#39;B01001A_019&#39;,
   &#39;B01001B_004&#39;, &#39;B01001B_019&#39;,
   &#39;B01001C_004&#39;, &#39;B01001C_019&#39;,
   &#39;B01001D_004&#39;, &#39;B01001D_019&#39;,
   &#39;B01001E_004&#39;, &#39;B01001E_019&#39;,
   &#39;B01001F_004&#39;, &#39;B01001F_019&#39;,
   &#39;B01001G_004&#39;, &#39;B01001G_019&#39;,
-  &#39;B01001H_004&#39;, &#39;B01001H_019&#39;,
-  &#39;B01001I_004&#39;, &#39;B01001I_019&#39;,
-  
-  # Group 3
+
+  &#39;B01001A_005&#39;, &#39;B01001A_020&#39;,
   &#39;B01001B_005&#39;, &#39;B01001B_020&#39;,
   &#39;B01001C_005&#39;, &#39;B01001C_020&#39;,
   &#39;B01001D_005&#39;, &#39;B01001D_020&#39;,
   &#39;B01001E_005&#39;, &#39;B01001E_020&#39;,
   &#39;B01001F_005&#39;, &#39;B01001F_020&#39;,
   &#39;B01001G_005&#39;, &#39;B01001G_020&#39;,
-  &#39;B01001H_005&#39;, &#39;B01001H_020&#39;,
-  &#39;B01001I_005&#39;, &#39;B01001I_020&#39;,
   
-  # Group 4
+  &#39;B01001A_006&#39;, &#39;B01001A_021&#39;,
   &#39;B01001B_006&#39;, &#39;B01001B_021&#39;,
   &#39;B01001C_006&#39;, &#39;B01001C_021&#39;,
   &#39;B01001D_006&#39;, &#39;B01001D_021&#39;,
   &#39;B01001E_006&#39;, &#39;B01001E_021&#39;,
   &#39;B01001F_006&#39;, &#39;B01001F_021&#39;,
   &#39;B01001G_006&#39;, &#39;B01001G_021&#39;,
-  &#39;B01001H_006&#39;, &#39;B01001H_021&#39;,
-  &#39;B01001I_006&#39;, &#39;B01001I_021&#39;,
   
-  # Group 5
+  &#39;B01001A_007&#39;, &#39;B01001A_022&#39;,
   &#39;B01001B_007&#39;, &#39;B01001B_022&#39;,
   &#39;B01001C_007&#39;, &#39;B01001C_022&#39;,
   &#39;B01001D_007&#39;, &#39;B01001D_022&#39;,
   &#39;B01001E_007&#39;, &#39;B01001E_022&#39;,
   &#39;B01001F_007&#39;, &#39;B01001F_022&#39;,
   &#39;B01001G_007&#39;, &#39;B01001G_022&#39;,
-  &#39;B01001H_007&#39;, &#39;B01001H_022&#39;,
-  &#39;B01001I_007&#39;, &#39;B01001I_022&#39;,
-  
-  # Group 6
+
+  &#39;B01001A_008&#39;, &#39;B01001A_023&#39;,
   &#39;B01001B_008&#39;, &#39;B01001B_023&#39;,
   &#39;B01001C_008&#39;, &#39;B01001C_023&#39;,
   &#39;B01001D_008&#39;, &#39;B01001D_023&#39;,
   &#39;B01001E_008&#39;, &#39;B01001E_023&#39;,
   &#39;B01001F_008&#39;, &#39;B01001F_023&#39;,
-  &#39;B01001G_008&#39;, &#39;B01001G_023&#39;,
-  &#39;B01001H_008&#39;, &#39;B01001H_023&#39;,
-  &#39;B01001I_008&#39;, &#39;B01001I_023&#39;
+  &#39;B01001G_008&#39;, &#39;B01001G_023&#39;
 )
 
 ls &lt;- length(ageunder25_groups) + 1
@@ -693,6 +683,304 @@ uhf_summary &lt;- merged %&gt;%
             total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
             total_ageunder25 = sum(Ageunder25, na.rm = TRUE)
   )</code></pre>
+</div>
+<div id="to-29" class="section level2">
+<h2>25 to 29</h2>
+<pre class="r"><code>age25to29_groups &lt;- c(
+  &#39;B01001A_009&#39;, &#39;B01001A_024&#39;,
+  &#39;B01001B_009&#39;, &#39;B01001B_024&#39;,
+  &#39;B01001C_009&#39;, &#39;B01001C_024&#39;,
+  &#39;B01001D_009&#39;, &#39;B01001D_024&#39;,
+  &#39;B01001E_009&#39;, &#39;B01001E_024&#39;,
+  &#39;B01001F_009&#39;, &#39;B01001F_024&#39;,
+  &#39;B01001G_009&#39;, &#39;B01001G_024&#39;
+  )
+
+ls &lt;- length(age25to29_groups) + 1
+
+age25to29 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age25to29_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age25to29 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age25to29,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="to-34" class="section level2">
+<h2>30 to 34</h2>
+<pre class="r"><code>age30to34_groups &lt;- c(
+  &#39;B01001A_010&#39;, &#39;B01001A_025&#39;,
+  &#39;B01001B_010&#39;, &#39;B01001B_025&#39;,
+  &#39;B01001C_010&#39;, &#39;B01001C_025&#39;,
+  &#39;B01001D_010&#39;, &#39;B01001D_025&#39;,
+  &#39;B01001E_010&#39;, &#39;B01001E_025&#39;,
+  &#39;B01001F_010&#39;, &#39;B01001F_025&#39;,
+  &#39;B01001G_010&#39;, &#39;B01001G_025&#39;
+  )
+
+ls &lt;- length(age30to34_groups) + 1
+
+age30to34 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age30to34_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age30to34 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age30to34,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="to-44" class="section level2">
+<h2>35 to 44</h2>
+<pre class="r"><code>age35to44_groups &lt;- c(
+  &#39;B01001A_011&#39;, &#39;B01001A_026&#39;,
+  &#39;B01001B_011&#39;, &#39;B01001B_026&#39;,
+  &#39;B01001C_011&#39;, &#39;B01001C_026&#39;,
+  &#39;B01001D_011&#39;, &#39;B01001D_026&#39;,
+  &#39;B01001E_011&#39;, &#39;B01001E_026&#39;,
+  &#39;B01001F_011&#39;, &#39;B01001F_026&#39;,
+  &#39;B01001G_011&#39;, &#39;B01001G_026&#39;
+)
+
+ls &lt;- length(age35to44_groups) + 1
+
+age35to44 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age35to44_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age35to44 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age35to44,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="to-54" class="section level2">
+<h2>45 to 54</h2>
+<pre class="r"><code>age45to54_groups&lt;-c(
+  &#39;B01001A_012&#39;, &#39;B01001A_027&#39;,
+  &#39;B01001B_012&#39;, &#39;B01001B_027&#39;,
+  &#39;B01001C_012&#39;, &#39;B01001C_027&#39;,
+  &#39;B01001D_012&#39;, &#39;B01001D_027&#39;,
+  &#39;B01001E_012&#39;, &#39;B01001E_027&#39;,
+  &#39;B01001F_012&#39;, &#39;B01001F_027&#39;,
+  &#39;B01001G_012&#39;, &#39;B01001G_027&#39;
+  )
+
+ls &lt;- length(age45to54_groups) + 1
+
+age45to54 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age45to54_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age45to54 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age45to54,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="to-64" class="section level2">
+<h2>55 to 64</h2>
+<pre class="r"><code>age55to64_groups &lt;- c(
+  &#39;B01001A_013&#39;, &#39;B01001A_028&#39;,
+  &#39;B01001B_013&#39;, &#39;B01001B_028&#39;,
+  &#39;B01001C_013&#39;, &#39;B01001C_028&#39;,
+  &#39;B01001D_013&#39;, &#39;B01001D_028&#39;,
+  &#39;B01001E_013&#39;, &#39;B01001E_028&#39;,
+  &#39;B01001F_013&#39;, &#39;B01001F_028&#39;,
+  &#39;B01001G_013&#39;, &#39;B01001G_028&#39;)
+
+ls &lt;- length(age55to64_groups) + 1
+age55to64 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age55to64_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age55to64 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age55to64,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE),
+            total_age55to64 = sum(Age55to64, na.rm = TRUE)
+  )</code></pre>
+</div>
+<div id="above-65" class="section level2">
+<h2>Above 65</h2>
+<pre class="r"><code>age_above65_groups &lt;- c(
+  # Age 65 to 74
+  &#39;B01001A_014&#39;, &#39;B01001A_029&#39;,
+  &#39;B01001B_014&#39;, &#39;B01001B_029&#39;,
+  &#39;B01001C_014&#39;, &#39;B01001C_029&#39;,
+  &#39;B01001D_014&#39;, &#39;B01001D_029&#39;,
+  &#39;B01001E_014&#39;, &#39;B01001E_029&#39;,
+  &#39;B01001F_014&#39;, &#39;B01001F_029&#39;,
+  &#39;B01001G_014&#39;, &#39;B01001G_029&#39;,
+  
+  # Age 75 to 84
+  &#39;B01001A_015&#39;, &#39;B01001A_030&#39;,
+  &#39;B01001B_015&#39;, &#39;B01001B_030&#39;,
+  &#39;B01001C_015&#39;, &#39;B01001C_030&#39;,
+  &#39;B01001D_015&#39;, &#39;B01001D_030&#39;,
+  &#39;B01001E_015&#39;, &#39;B01001E_030&#39;,
+  &#39;B01001F_015&#39;, &#39;B01001F_030&#39;,
+  &#39;B01001G_015&#39;, &#39;B01001G_030&#39;,
+  
+  # Age 85+
+  &#39;B01001A_016&#39;, &#39;B01001A_031&#39;,
+  &#39;B01001B_016&#39;, &#39;B01001B_031&#39;,
+  &#39;B01001C_016&#39;, &#39;B01001C_031&#39;,
+  &#39;B01001D_016&#39;, &#39;B01001D_031&#39;,
+  &#39;B01001E_016&#39;, &#39;B01001E_031&#39;,
+  &#39;B01001F_016&#39;, &#39;B01001F_031&#39;,
+  &#39;B01001G_016&#39;, &#39;B01001G_031&#39;
+)
+
+ls &lt;- length(age_above65_groups) + 1
+age_above65 &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = age_above65_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(&#39;GEOID&#39;,&#39;variable&#39;,&#39;estimate&#39;) %&gt;%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = &quot;_&quot;) %&gt;%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %&gt;%
+    select(GEOID, Age_above65 = Total_Estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, age_above65,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE),
+            total_age55to64 = sum(Age55to64, na.rm = TRUE),
+            total_age_above65 = sum(Age_above65, na.rm = TRUE)
+  )
+
+write.csv(uhf_summary, file = &quot;2_output/uhf_summary.csv&quot;, row.names = FALSE)</code></pre>
+</div>
 </div>
 
 

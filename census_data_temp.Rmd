@@ -231,67 +231,58 @@ uhf_summary <- merged %>%
 ```
 
 # Age
+
+## Under 25
+
 ```{r}
 ageunder25_groups <- c(
-  # Group 1
+  'B01001A_003', 'B01001A_018',
   'B01001B_003', 'B01001B_018',
   'B01001C_003', 'B01001C_018',
   'B01001D_003', 'B01001D_018',
   'B01001E_003', 'B01001E_018',
   'B01001F_003', 'B01001F_018',
   'B01001G_003', 'B01001G_018',
-  'B01001H_003', 'B01001H_018',
-  'B01001I_003', 'B01001I_018',
   
-  # Group 2
+  'B01001A_004', 'B01001A_019',
   'B01001B_004', 'B01001B_019',
   'B01001C_004', 'B01001C_019',
   'B01001D_004', 'B01001D_019',
   'B01001E_004', 'B01001E_019',
   'B01001F_004', 'B01001F_019',
   'B01001G_004', 'B01001G_019',
-  'B01001H_004', 'B01001H_019',
-  'B01001I_004', 'B01001I_019',
-  
-  # Group 3
+
+  'B01001A_005', 'B01001A_020',
   'B01001B_005', 'B01001B_020',
   'B01001C_005', 'B01001C_020',
   'B01001D_005', 'B01001D_020',
   'B01001E_005', 'B01001E_020',
   'B01001F_005', 'B01001F_020',
   'B01001G_005', 'B01001G_020',
-  'B01001H_005', 'B01001H_020',
-  'B01001I_005', 'B01001I_020',
   
-  # Group 4
+  'B01001A_006', 'B01001A_021',
   'B01001B_006', 'B01001B_021',
   'B01001C_006', 'B01001C_021',
   'B01001D_006', 'B01001D_021',
   'B01001E_006', 'B01001E_021',
   'B01001F_006', 'B01001F_021',
   'B01001G_006', 'B01001G_021',
-  'B01001H_006', 'B01001H_021',
-  'B01001I_006', 'B01001I_021',
   
-  # Group 5
+  'B01001A_007', 'B01001A_022',
   'B01001B_007', 'B01001B_022',
   'B01001C_007', 'B01001C_022',
   'B01001D_007', 'B01001D_022',
   'B01001E_007', 'B01001E_022',
   'B01001F_007', 'B01001F_022',
   'B01001G_007', 'B01001G_022',
-  'B01001H_007', 'B01001H_022',
-  'B01001I_007', 'B01001I_022',
-  
-  # Group 6
+
+  'B01001A_008', 'B01001A_023',
   'B01001B_008', 'B01001B_023',
   'B01001C_008', 'B01001C_023',
   'B01001D_008', 'B01001D_023',
   'B01001E_008', 'B01001E_023',
   'B01001F_008', 'B01001F_023',
-  'B01001G_008', 'B01001G_023',
-  'B01001H_008', 'B01001H_023',
-  'B01001I_008', 'B01001I_023'
+  'B01001G_008', 'B01001G_023'
 )
 
 ls <- length(ageunder25_groups) + 1
@@ -325,3 +316,312 @@ uhf_summary <- merged %>%
   )
 ```
 
+## 25 to 29
+
+```{r}
+age25to29_groups <- c(
+  'B01001A_009', 'B01001A_024',
+  'B01001B_009', 'B01001B_024',
+  'B01001C_009', 'B01001C_024',
+  'B01001D_009', 'B01001D_024',
+  'B01001E_009', 'B01001E_024',
+  'B01001F_009', 'B01001F_024',
+  'B01001G_009', 'B01001G_024'
+  )
+
+ls <- length(age25to29_groups) + 1
+
+age25to29 <- get_acs(geography = "zcta",
+                    variables = age25to29_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age25to29 = Total_Estimate)
+
+merged <- merge(merged, age25to29,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE)
+  )
+```
+
+## 30 to 34
+
+```{r}
+age30to34_groups <- c(
+  'B01001A_010', 'B01001A_025',
+  'B01001B_010', 'B01001B_025',
+  'B01001C_010', 'B01001C_025',
+  'B01001D_010', 'B01001D_025',
+  'B01001E_010', 'B01001E_025',
+  'B01001F_010', 'B01001F_025',
+  'B01001G_010', 'B01001G_025'
+  )
+
+ls <- length(age30to34_groups) + 1
+
+age30to34 <- get_acs(geography = "zcta",
+                    variables = age30to34_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age30to34 = Total_Estimate)
+
+merged <- merge(merged, age30to34,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE)
+  )
+```
+
+## 35 to 44
+
+```{r}
+age35to44_groups <- c(
+  'B01001A_011', 'B01001A_026',
+  'B01001B_011', 'B01001B_026',
+  'B01001C_011', 'B01001C_026',
+  'B01001D_011', 'B01001D_026',
+  'B01001E_011', 'B01001E_026',
+  'B01001F_011', 'B01001F_026',
+  'B01001G_011', 'B01001G_026'
+)
+
+ls <- length(age35to44_groups) + 1
+
+age35to44 <- get_acs(geography = "zcta",
+                    variables = age35to44_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age35to44 = Total_Estimate)
+
+merged <- merge(merged, age35to44,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE)
+  )
+```
+
+## 45 to 54
+
+```{r}
+age45to54_groups<-c(
+  'B01001A_012', 'B01001A_027',
+  'B01001B_012', 'B01001B_027',
+  'B01001C_012', 'B01001C_027',
+  'B01001D_012', 'B01001D_027',
+  'B01001E_012', 'B01001E_027',
+  'B01001F_012', 'B01001F_027',
+  'B01001G_012', 'B01001G_027'
+  )
+
+ls <- length(age45to54_groups) + 1
+
+age45to54 <- get_acs(geography = "zcta",
+                    variables = age45to54_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age45to54 = Total_Estimate)
+
+merged <- merge(merged, age45to54,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE)
+  )
+```
+
+## 55 to 64
+
+```{r}
+age55to64_groups <- c(
+  'B01001A_013', 'B01001A_028',
+  'B01001B_013', 'B01001B_028',
+  'B01001C_013', 'B01001C_028',
+  'B01001D_013', 'B01001D_028',
+  'B01001E_013', 'B01001E_028',
+  'B01001F_013', 'B01001F_028',
+  'B01001G_013', 'B01001G_028')
+
+ls <- length(age55to64_groups) + 1
+age55to64 <- get_acs(geography = "zcta",
+                    variables = age55to64_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age55to64 = Total_Estimate)
+
+merged <- merge(merged, age55to64,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE),
+            total_age55to64 = sum(Age55to64, na.rm = TRUE)
+  )
+```
+
+## Above 65
+
+```{r}
+age_above65_groups <- c(
+  # Age 65 to 74
+  'B01001A_014', 'B01001A_029',
+  'B01001B_014', 'B01001B_029',
+  'B01001C_014', 'B01001C_029',
+  'B01001D_014', 'B01001D_029',
+  'B01001E_014', 'B01001E_029',
+  'B01001F_014', 'B01001F_029',
+  'B01001G_014', 'B01001G_029',
+  
+  # Age 75 to 84
+  'B01001A_015', 'B01001A_030',
+  'B01001B_015', 'B01001B_030',
+  'B01001C_015', 'B01001C_030',
+  'B01001D_015', 'B01001D_030',
+  'B01001E_015', 'B01001E_030',
+  'B01001F_015', 'B01001F_030',
+  'B01001G_015', 'B01001G_030',
+  
+  # Age 85+
+  'B01001A_016', 'B01001A_031',
+  'B01001B_016', 'B01001B_031',
+  'B01001C_016', 'B01001C_031',
+  'B01001D_016', 'B01001D_031',
+  'B01001E_016', 'B01001E_031',
+  'B01001F_016', 'B01001F_031',
+  'B01001G_016', 'B01001G_031'
+)
+
+ls <- length(age_above65_groups) + 1
+age_above65 <- get_acs(geography = "zcta",
+                    variables = age_above65_groups,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = "acs5") %>%
+    select('GEOID','variable','estimate') %>%
+    pivot_wider(names_from = variable,
+                values_from = estimate,
+                names_sep = "_") %>%
+    mutate(Total_Estimate = rowSums(select(.,2:ls), na.rm = TRUE)) %>%
+    select(GEOID, Age_above65 = Total_Estimate)
+
+merged <- merge(merged, age_above65,
+                by.x = "ZCTA", by.y = "GEOID", 
+                all.x = TRUE)
+
+uhf_summary <- merged %>%
+  distinct(ZCTA, .keep_all = TRUE) %>%
+  group_by(UHF_id) %>%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE),
+            total_age55to64 = sum(Age55to64, na.rm = TRUE),
+            total_age_above65 = sum(Age_above65, na.rm = TRUE)
+  )
+
+write.csv(uhf_summary, file = "2_output/uhf_summary.csv", row.names = FALSE)
+
+```
