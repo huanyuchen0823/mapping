@@ -390,7 +390,8 @@ library(tidyverse)</code></pre>
 modzcta_zip_counts &lt;- read.csv(&quot;./0_prepare/modzcta_zip_counts.csv&quot;)
 zipcode_uhf_mapping &lt;- read.csv(&quot;./0_prepare/zipcode_uhf_mapping.csv&quot;)
 # filter
-# uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
+# uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301,
+#              303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
 
 merged_data &lt;- merge(dat_merged_1, modzcta_zip_counts[, c(&quot;ZCTA_str&quot;, &quot;zip_code&quot;)], 
                      by.x = &quot;zipcode&quot;, by.y = &quot;zip_code&quot;, all.x = TRUE) %&gt;%
@@ -977,10 +978,43 @@ uhf_summary &lt;- merged %&gt;%
             total_age45to54 = sum(Age45to54, na.rm = TRUE),
             total_age55to64 = sum(Age55to64, na.rm = TRUE),
             total_age_above65 = sum(Age_above65, na.rm = TRUE)
+  )</code></pre>
+</div>
+</div>
+<div id="employment" class="section level1">
+<h1>Employment</h1>
+<pre class="r"><code>employment &lt;- get_acs(geography = &quot;zcta&quot;,
+                    variables = &quot;B27011_003&quot;,
+                    year = 2021,
+                    zcta = zcta_ls,
+                    moe_level = 90,
+                    survey = &quot;acs5&quot;) %&gt;%
+    select(GEOID, Employment = estimate)</code></pre>
+<pre><code>## Getting data from the 2017-2021 5-year ACS</code></pre>
+<pre class="r"><code>merged &lt;- merge(merged, employment,
+                by.x = &quot;ZCTA&quot;, by.y = &quot;GEOID&quot;, 
+                all.x = TRUE)
+
+uhf_summary &lt;- merged %&gt;%
+  distinct(ZCTA, .keep_all = TRUE) %&gt;%
+  group_by(UHF_id) %&gt;%
+  summarise(total_population = sum(Population, na.rm = TRUE),
+            total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
+            total_bachelor = sum(Bachelor, na.rm = TRUE),
+            total_householdincome = sum(Household_income, na.rm = TRUE),
+            total_householdnum = sum(Household_num, na.rm = TRUE),
+            total_no_vehicles = sum(No_vehicles, na.rm = TRUE),
+            total_ageunder25 = sum(Ageunder25, na.rm = TRUE),
+            total_age25to29 = sum(Age25to29, na.rm = TRUE),
+            total_age30to34 = sum(Age30to34, na.rm = TRUE),
+            total_age35to44 = sum(Age35to44, na.rm = TRUE),
+            total_age45to54 = sum(Age45to54, na.rm = TRUE),
+            total_age55to64 = sum(Age55to64, na.rm = TRUE),
+            total_age_above65 = sum(Age_above65, na.rm = TRUE),
+            total_employment = sum(Employment, na.rm = TRUE)
   )
 
 write.csv(uhf_summary, file = &quot;2_output/uhf_summary.csv&quot;, row.names = FALSE)</code></pre>
-</div>
 </div>
 
 
