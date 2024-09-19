@@ -1,0 +1,32 @@
+---
+title: "Regression"
+author: "Huanyu Chen"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(dplyr)
+```
+
+
+# Data Preparation
+
+```{r}
+# Census Data Preparation
+census <- read_csv("./2_output/uhf_summary.csv")
+divisor_column <- census[[2]]
+
+census <- census %>%
+  mutate_at(vars(3:15), ~ round((. / divisor_column * 100), 3))
+
+write_csv(census, "./3_output/census_precentage.csv")
+
+# Merge with scores
+scores <- read_csv("./1_output/dat_merge_2_UHF>=15.csv")
+dat <- left_join(census, scores, by = "UHF_id") %>%
+  arrange(is.na(ParticipantCount))
+
+write_csv(dat, "./3_output/whole_dataset.csv")
+```
+
