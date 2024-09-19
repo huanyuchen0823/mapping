@@ -9,14 +9,26 @@ library(tidyverse)
 library(viridis)
 library(data.table)
 library(dplyr)
+library(tidyr)
+library(readxl)
 ```
 
-# Merge three levels for survey data
+# Data pre-processing
+
+## zip_UHF
+
+```{r}
+zipcode_uhf_mapping <- read_excel("0_prepare/uhf_zipcode.xlsx") %>%
+  select(UHF_id, Zipcodes) %>%
+  separate_rows(Zipcodes, sep = ",") %>% 
+  rename(zip_code = Zipcodes)
+```
+
+## mapping three levels
 
 ```{r}
 dat_merged_1 <- read.csv("./1_output/dat_merged_1.csv")
 modzcta_zip_counts <- read.csv("./0_prepare/modzcta_zip_counts.csv")
-zipcode_uhf_mapping <- read.csv("./0_prepare/zipcode_uhf_mapping.csv")
 # filter
 # uhf_ids <- c(104, 105, 205, 207, 208, 211, 301,
 #              303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)

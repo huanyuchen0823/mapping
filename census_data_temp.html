@@ -383,12 +383,22 @@ library(tidyverse)</code></pre>
 ## The following object is masked from &#39;package:purrr&#39;:
 ## 
 ##     transpose</code></pre>
-<pre class="r"><code>library(dplyr)</code></pre>
-<div id="merge-three-levels-for-survey-data" class="section level1">
-<h1>Merge three levels for survey data</h1>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(readxl)</code></pre>
+<div id="data-pre-processing" class="section level1">
+<h1>Data pre-processing</h1>
+<div id="zip_uhf" class="section level2">
+<h2>zip_UHF</h2>
+<pre class="r"><code>zipcode_uhf_mapping &lt;- read_excel(&quot;0_prepare/uhf_zipcode.xlsx&quot;) %&gt;%
+  select(UHF_id, Zipcodes) %&gt;%
+  separate_rows(Zipcodes, sep = &quot;,&quot;) %&gt;% 
+  rename(zip_code = Zipcodes)</code></pre>
+</div>
+<div id="mapping-three-levels" class="section level2">
+<h2>mapping three levels</h2>
 <pre class="r"><code>dat_merged_1 &lt;- read.csv(&quot;./1_output/dat_merged_1.csv&quot;)
 modzcta_zip_counts &lt;- read.csv(&quot;./0_prepare/modzcta_zip_counts.csv&quot;)
-zipcode_uhf_mapping &lt;- read.csv(&quot;./0_prepare/zipcode_uhf_mapping.csv&quot;)
 # filter
 # uhf_ids &lt;- c(104, 105, 205, 207, 208, 211, 301,
 #              303, 304, 306, 309, 310, 401, 405, 407, 408, 501, 502)
@@ -407,6 +417,7 @@ mapping_guide &lt;- mapping_guide_temp %&gt;%
   filter(!is.na(UHF_id))
 
 write.csv(mapping_guide, file = &quot;2_output/mapping_guide.csv&quot;, row.names = FALSE)</code></pre>
+</div>
 </div>
 <div id="download-data" class="section level1">
 <h1>Download Data</h1>
