@@ -405,7 +405,7 @@ modzcta_zip_counts &lt;- read.csv(&quot;./0_prepare/modzcta_zip_counts.csv&quot;
 
 merged_data &lt;- merge(dat_merged_1, modzcta_zip_counts[, c(&quot;ZCTA_str&quot;, &quot;zip_code&quot;)], 
                      by.x = &quot;zipcode&quot;, by.y = &quot;zip_code&quot;, all.x = TRUE) %&gt;%
-  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything())
+  select(ResponseId, zipcode, ZCTA_str, UHF_id, everything())
   # filter(UHF_id %in% uhf_ids)
 
 write.csv(merged_data, file = &quot;2_output/merged_output.csv&quot;, row.names = FALSE)

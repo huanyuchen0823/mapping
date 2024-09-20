@@ -8,7 +8,9 @@ output: html_document
 ```{r}
 library(readr)
 library(dplyr)
+library(readxl)
 library(ggplot2)
+library(tidyr)
 library(gridExtra)
 ```
 
@@ -30,10 +32,10 @@ agency_scores <- read_csv("./0_prepare/agency_scores.csv") %>%
 dat_lossgain_scores <- read_csv("./0_prepare/dat_lossgain_scores.csv") %>%
   select(1, 10)
 
-zipcode_uhf_mapping <- read_csv("./0_prepare/zipcode_uhf_mapping.csv") %>%
-  select(1, 3, 4) %>%
-  mutate(zipcode = as.character(zip_code)) %>%
-  select(-zip_code)
+zipcode_uhf_mapping <- read_excel("0_prepare/uhf_zipcode.xlsx") %>%
+  select(UHF_id, Zipcodes) %>%
+  separate_rows(Zipcodes, sep = ",") %>% 
+  rename(zipcode = Zipcodes)
 ```
 
 ```{r}
@@ -60,7 +62,7 @@ dat <- dat %>%
     agency_scores_scaled = scale_to_100(agency_scores, agency_scores_min, agency_scores_max),
     td_score_scaled = scale_to_100(td_score, td_score_min, td_score_max),
     loss_aversion_scores_scaled = scale_to_100(loss_aversion_scores, loss_aversion_scores_min, loss_aversion_scores_max)) %>%
-  select(ResponseId, zipcode, UHF_id, UHF_name, td_score, td_score_scaled,
+  select(ResponseId, zipcode, UHF_id, td_score, td_score_scaled,
          agency_scores, agency_scores_scaled, loss_aversion_scores, loss_aversion_scores_scaled)
 
 write_csv(dat, "./1_output/dat_merged_1.csv")

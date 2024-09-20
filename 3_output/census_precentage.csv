@@ -1,4 +1,4 @@
-UHF_id,total_population,total_no_health_insurance,total_bachelor,total_householdincome,total_householdnum,total_no_vehicles,total_ageunder25,total_age25to29,total_age30to34,total_age35to44,total_age45to54,total_age55to64,total_age_above65,total_employment
+UHF_id,total_population,no_health_insurance,bachelor,householdincome,householdnum,no_vehicles,ageunder25,age25to29,age30to34,age35to44,age45to54,age55to64,age_above65,employment
 101,96643,4.075,15.976,164.953,40.578,17.459,28.635,5.786,5.789,11.951,12.397,12.703,22.737,38.856
 102,195566,6.626,11.378,96.98,34.331,13.554,30.139,7.317,6.747,11.366,13.099,13.621,17.712,41.195
 103,287892,9.049,7.535,66.571,35.247,23.305,36.277,9.007,7.67,12.969,12.315,10.922,10.84,40.309

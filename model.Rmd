@@ -1,0 +1,183 @@
+---
+title: "Model"
+author: "Huanyu Chen"
+output: html_document
+---
+
+```{r}
+library(readr)
+library(dplyr)
+library(stringr)
+library(corrplot)
+library(randomForest)
+library(glmnet)
+```
+
+
+# Data Preparation
+
+```{r}
+# Census Data Preparation
+census <- read_csv("./2_output/uhf_summary.csv")
+divisor_column <- census[[2]]
+
+census <- census %>%
+  mutate_at(vars(3:15), ~ round((. / divisor_column * 100), 3)) %>%
+  rename_at(vars(3:15), ~ str_remove(., "^total_"))
+
+write_csv(census, "./3_output/census_precentage.csv")
+
+# Merge with three scores
+scores <- read_csv("./1_output/dat_merge_2_UHF>=15.csv")
+dat <- left_join(census, scores, by = "UHF_id") %>%
+  arrange(is.na(ParticipantCount)) %>%
+  select(-c(total_population, ParticipantCount, mean_td_score, sd_td_score,
+         mean_los_score, sd_los_score, mean_ag_score, sd_ag_score))
+```
+
+# Weighted Age
+
+```{r}
+dat <- dat %>%
+  mutate(weighted_age = (12 * ageunder25 +
+                         27 * age25to29 +
+                         32 * age30to34 +
+                         39.5 * age35to44 +
+                         49.5 * age45to54 +
+                         59.5 * age55to64 +
+                         80 * age_above65) / 100,
+         weighted_age = round(weighted_age, 3)) %>%
+  select(-ageunder25, -age25to29, -age30to34, -age35to44, -age45to54, -age55to64, -age_above65)
+
+write_csv(dat, "./3_output/merge_dataset.csv")
+```
+
+
+# Linear Regression Model
+
+## Temporal Discounting
+
+```{r}
+model_td <- lm(median_td_score ~ no_health_insurance + bachelor +
+               householdincome + householdnum + no_vehicles +
+               weighted_age + employment, data = dat)
+summary(model_td)
+
+par(mfrow = c(2, 2))
+plot(model_td)
+
+mean(model_td$residuals^2)
+```
+
+## Agency
+
+```{r}
+model_ag <- lm(median_ag_score ~ no_health_insurance + bachelor +
+               householdincome + householdnum + no_vehicles +
+               weighted_age + employment, data = dat)
+summary(model_ag)
+
+par(mfrow = c(2, 2))
+plot(model_ag)
+
+mean(model_ag$residuals^2)
+```
+
+## Loss Aversion
+
+```{r}
+# full model
+model_los_1 <- lm(median_los_score ~ no_health_insurance + bachelor +
+               householdincome + householdnum + no_vehicles +
+               weighted_age + employment, data = dat)
+summary(model_los_1)
+
+# correlation plot
+dat_selected <- dat %>%
+  select(no_health_insurance, bachelor, householdincome, householdnum,
+         no_vehicles, weighted_age, employment)
+
+corr_matrix <- cor(dat_selected, use = "complete.obs")
+corrplot(corr_matrix, method = "number", type = "lower", tl.col = "black")
+
+# model excluding bachelor
+model_los_2 <- lm(median_los_score ~ no_health_insurance + 
+               householdincome + householdnum + no_vehicles +
+               weighted_age + employment, data = dat)
+summary(model_los_2)
+
+# model excluding bachelor and household number
+model_los_3 <- lm(median_los_score ~ no_health_insurance + householdincome + 
+                    no_vehicles + weighted_age + employment, data = dat)
+summary(model_los_3)
+
+par(mfrow = c(2, 2))
+plot(model_los_3)
+
+mean(model_los_3$residuals^2)
+```
+
+## Prediction
+
+```{r}
+dat_subset <- dat[19:nrow(dat), ]
+
+dat[19:nrow(dat), "median_td_score"] <- round(predict(model_td, newdata = dat_subset), 2)
+dat[19:nrow(dat), "median_ag_score"] <- round(predict(model_ag, newdata = dat_subset), 2)
+dat[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3, newdata = dat_subset), 2)
+
+write_csv(dat, "./3_output/whole_dataset.csv")
+```
+
+# GLM: LASSO
+
+```{r}
+X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
+                  householdincome + householdnum + no_vehicles + 
+                  weighted_age + employment, data = dat[1:18, ])[,-1]
+y <- dat[1:18, ]$median_td_score
+
+lasso_model <- glmnet(X, y, alpha = 1)
+cv_lasso <- cv.glmnet(X, y, alpha = 1)
+
+best_lambda <- cv_lasso$lambda.min
+print(best_lambda)
+
+final_model <- glmnet(X, y, family = "gaussian", alpha = 1, lambda = best_lambda)
+coef(final_model)
+
+# # predict
+# newX <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
+#                      householdincome + householdnum + no_vehicles + 
+#                      weighted_age + employment, data = dat[19:nrow(dat), ])[,-1]
+# 
+# dat[19:nrow(dat), "median_los_score"] <- predict(final_model, newx = newX, s = best_lambda)
+# 
+# write_csv(dat, "./3_output/lasso_dataset.csv")
+```
+
+# Random Forest
+
+```{r}
+model_rf_1 <- randomForest(median_td_score ~ no_health_insurance + bachelor + 
+                           householdincome + householdnum + no_vehicles + 
+                           weighted_age + employment, data = dat[1:18, ], 
+                         importance = TRUE)
+print(model_rf_1)
+
+model_rf_2 <- randomForest(median_ag_score ~ no_health_insurance + bachelor + 
+                           householdincome + householdnum + no_vehicles + 
+                           weighted_age + employment, data = dat[1:18, ], 
+                         importance = TRUE)
+print(model_rf_2)
+
+model_rf_3 <- randomForest(median_los_score ~ no_health_insurance + bachelor + 
+                           householdincome + householdnum + no_vehicles + 
+                           weighted_age + employment, data = dat[1:18, ], 
+                         importance = TRUE)
+print(model_rf_3)
+```
+
+Comment: Only `model_rf_3` explains approx. 40% of the variance in the data.
+
+# SMOTE

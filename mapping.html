@@ -11,7 +11,7 @@
 
 <meta name="author" content="Huanyu Chen" />
 
-<meta name="date" content="2024-09-13" />
+<meta name="date" content="2024-09-19" />
 
 <title>Mapping Scores with Participant IDs into UHF</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Mapping Scores with Participant IDs into
 UHF</h1>
 <h4 class="author">Huanyu Chen</h4>
-<h4 class="date">2024-09-13</h4>
+<h4 class="date">2024-09-19</h4>
 
 </div>
 
@@ -368,7 +368,9 @@ library(dplyr)</code></pre>
 <pre><code>## The following objects are masked from &#39;package:base&#39;:
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(ggplot2)
+<pre class="r"><code>library(readxl)
+library(ggplot2)
+library(tidyr)
 library(gridExtra)</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;gridExtra&#39;</code></pre>
@@ -413,18 +415,10 @@ library(gridExtra)</code></pre>
 ## 
 ## ℹ Use `spec()` to retrieve the full column specification for this data.
 ## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
-<pre class="r"><code>zipcode_uhf_mapping &lt;- read_csv(&quot;./0_prepare/zipcode_uhf_mapping.csv&quot;) %&gt;%
-  select(1, 3, 4) %&gt;%
-  mutate(zipcode = as.character(zip_code)) %&gt;%
-  select(-zip_code)</code></pre>
-<pre><code>## Rows: 137 Columns: 4
-## ── Column specification ────────────────────────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr (1): UHF_name
-## dbl (3): zip_code, zip_str, UHF_id
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>zipcode_uhf_mapping &lt;- read_excel(&quot;0_prepare/uhf_zipcode.xlsx&quot;) %&gt;%
+  select(UHF_id, Zipcodes) %&gt;%
+  separate_rows(Zipcodes, sep = &quot;,&quot;) %&gt;% 
+  rename(zipcode = Zipcodes)</code></pre>
 <pre class="r"><code>dat &lt;- agency_scores %&gt;%
   inner_join(unique_item, by = &quot;ResponseId&quot;) %&gt;%
   inner_join(dat_lossgain_scores, by = &quot;ResponseId&quot;) %&gt;%
@@ -448,7 +442,7 @@ dat &lt;- dat %&gt;%
     agency_scores_scaled = scale_to_100(agency_scores, agency_scores_min, agency_scores_max),
     td_score_scaled = scale_to_100(td_score, td_score_min, td_score_max),
     loss_aversion_scores_scaled = scale_to_100(loss_aversion_scores, loss_aversion_scores_min, loss_aversion_scores_max)) %&gt;%
-  select(ResponseId, zipcode, UHF_id, UHF_name, td_score, td_score_scaled,
+  select(ResponseId, zipcode, UHF_id, td_score, td_score_scaled,
          agency_scores, agency_scores_scaled, loss_aversion_scores, loss_aversion_scores_scaled)
 
 write_csv(dat, &quot;./1_output/dat_merged_1.csv&quot;)</code></pre>

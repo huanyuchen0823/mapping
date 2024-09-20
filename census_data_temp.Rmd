@@ -35,7 +35,7 @@ modzcta_zip_counts <- read.csv("./0_prepare/modzcta_zip_counts.csv")
 
 merged_data <- merge(dat_merged_1, modzcta_zip_counts[, c("ZCTA_str", "zip_code")], 
                      by.x = "zipcode", by.y = "zip_code", all.x = TRUE) %>%
-  select(ResponseId, zipcode, ZCTA_str, UHF_id, UHF_name, everything())
+  select(ResponseId, zipcode, ZCTA_str, UHF_id, everything())
   # filter(UHF_id %in% uhf_ids)
 
 write.csv(merged_data, file = "2_output/merged_output.csv", row.names = FALSE)
