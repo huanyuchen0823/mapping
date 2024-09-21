@@ -813,7 +813,45 @@ gwrG_td</code></pre>
                bandwidth = bwG_ag, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
-# gwrG_ag</code></pre>
+gwrG_ag</code></pre>
+<pre><code>## Call:
+## gwr(formula = median_ag_score ~ no_health_insurance + bachelor + 
+##     householdincome + householdnum + no_vehicles + weighted_age + 
+##     employment, data = sp_data_train, bandwidth = bwG_ag, gweight = gwr.Gauss, 
+##     hatmatrix = TRUE)
+## Kernel function: gwr.Gauss 
+## Fixed bandwidth: 144355.1 
+## Summary of GWR coefficient estimates at data points:
+##                            Min.     1st Qu.      Median     3rd Qu.        Max.
+## X.Intercept.         98.4617527  99.7803921 100.3350745 100.5905142 100.9987732
+## no_health_insurance   0.1599872   0.1660066   0.1697520   0.1783941   0.1908162
+## bachelor              1.2324980   1.2460650   1.2551338   1.2572380   1.2803131
+## householdincome      -0.0014954  -0.0014125  -0.0013940  -0.0013400  -0.0012480
+## householdnum         -1.0558823  -1.0394310  -1.0343447  -1.0317301  -1.0221307
+## no_vehicles           0.3413946   0.3423886   0.3444250   0.3458659   0.3484888
+## weighted_age          0.5415082   0.5487896   0.5554236   0.5650097   0.5807190
+## employment           -1.0723346  -1.0644593  -1.0627551  -1.0570106  -1.0481244
+##                      Global
+## X.Intercept.        99.8300
+## no_health_insurance  0.1829
+## bachelor             1.2492
+## householdincome     -0.0013
+## householdnum        -1.0275
+## no_vehicles          0.3426
+## weighted_age         0.5566
+## employment          -1.0594
+## Number of data points: 37 
+## Effective number of parameters (residual: 2traceS - traceS&#39;S): 8.42462 
+## Effective degrees of freedom (residual: 2traceS - traceS&#39;S): 28.57538 
+## Sigma (residual: 2traceS - traceS&#39;S): 1.455421 
+## Effective number of parameters (model: traceS): 8.219785 
+## Effective degrees of freedom (model: traceS): 28.78021 
+## Sigma (model: traceS): 1.450233 
+## Sigma (ML): 1.279039 
+## AICc (GWR p. 61, eq 2.33; p. 96, eq. 4.21): 148.69 
+## AIC (GWR p. 96, eq. 4.22): 131.4333 
+## Residual sum of squares: 60.52982 
+## Quasi-global R2: 0.7915936</code></pre>
 </div>
 <div id="loss-aversion-1" class="section level2">
 <h2>Loss Aversion</h2>
@@ -828,7 +866,36 @@ gwrG_td</code></pre>
                 bandwidth = bwG_ag, 
                 gweight = gwr.Gauss, 
                 hatmatrix = TRUE)
-# gwrG_los</code></pre>
+gwrG_los</code></pre>
+<pre><code>## Call:
+## gwr(formula = median_los_score ~ no_health_insurance + bachelor + 
+##     householdincome + householdnum + no_vehicles + weighted_age + 
+##     employment, data = sp_data_train, bandwidth = bwG_ag, gweight = gwr.Gauss, 
+##     hatmatrix = TRUE)
+## Kernel function: gwr.Gauss 
+## Fixed bandwidth: 144355.1 
+## Summary of GWR coefficient estimates at data points:
+##                          Min.   1st Qu.    Median   3rd Qu.      Max.  Global
+## X.Intercept.        75.613234 76.631307 77.569430 78.120230 78.815752 76.5127
+## no_health_insurance -3.375750 -3.350697 -3.328339 -3.292695 -3.247905 -3.3380
+## bachelor            -1.858456 -1.845945 -1.834109 -1.824530 -1.799157 -1.8596
+## householdincome     -0.010619 -0.010588 -0.010501 -0.010398 -0.010365 -0.0105
+## householdnum        -0.541736 -0.523746 -0.514063 -0.495195 -0.451031 -0.5073
+## no_vehicles         -0.128682 -0.114940 -0.108711 -0.105811 -0.100801 -0.1036
+## weighted_age        -0.884659 -0.867220 -0.851470 -0.841485 -0.803488 -0.8404
+## employment           2.076165  2.092652  2.103939  2.121907  2.130518  2.1235
+## Number of data points: 37 
+## Effective number of parameters (residual: 2traceS - traceS&#39;S): 8.42462 
+## Effective degrees of freedom (residual: 2traceS - traceS&#39;S): 28.57538 
+## Sigma (residual: 2traceS - traceS&#39;S): 2.732039 
+## Effective number of parameters (model: traceS): 8.219785 
+## Effective degrees of freedom (model: traceS): 28.78021 
+## Sigma (model: traceS): 2.722299 
+## Sigma (ML): 2.400944 
+## AICc (GWR p. 61, eq 2.33; p. 96, eq. 4.21): 195.2917 
+## AIC (GWR p. 96, eq. 4.22): 178.035 
+## Residual sum of squares: 213.2876 
+## Quasi-global R2: 0.8783704</code></pre>
 </div>
 <div id="existing-data-plot-performance" class="section level2">
 <h2>Existing Data Plot &amp; Performance</h2>

@@ -252,7 +252,7 @@ gwrG_ag <- gwr(median_ag_score ~ no_health_insurance + bachelor + householdincom
                bandwidth = bwG_ag, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
-# gwrG_ag
+gwrG_ag
 ```
 
 ## Loss Aversion
@@ -268,7 +268,7 @@ gwrG_los <- gwr(median_los_score ~ no_health_insurance + bachelor + householdinc
                 bandwidth = bwG_ag, 
                 gweight = gwr.Gauss, 
                 hatmatrix = TRUE)
-# gwrG_los
+gwrG_los
 ```
 
 ## Existing Data Plot & Performance
