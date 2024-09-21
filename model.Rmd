@@ -16,8 +16,9 @@ library(glmnet)
 
 # Data Preparation
 
+## Census Data Preparation
+
 ```{r}
-# Census Data Preparation
 census <- read_csv("./2_output/uhf_summary.csv")
 divisor_column <- census[[2]]
 
@@ -26,8 +27,11 @@ census <- census %>%
   rename_at(vars(3:15), ~ str_remove(., "^total_"))
 
 write_csv(census, "./3_output/census_precentage.csv")
+```
 
-# Merge with three scores
+## Merge with three scores
+
+```{r}
 scores <- read_csv("./1_output/dat_merge_2_UHF>=15.csv")
 dat <- left_join(census, scores, by = "UHF_id") %>%
   arrange(is.na(ParticipantCount)) %>%
@@ -35,7 +39,7 @@ dat <- left_join(census, scores, by = "UHF_id") %>%
          mean_los_score, sd_los_score, mean_ag_score, sd_ag_score))
 ```
 
-# Weighted Age
+## Weighted Age
 
 ```{r}
 dat <- dat %>%
@@ -53,7 +57,7 @@ write_csv(dat, "./3_output/merge_dataset.csv")
 ```
 
 
-# Linear Regression Model
+# Linear Regression Model: good performance
 
 ## Temporal Discounting
 
@@ -129,7 +133,7 @@ dat[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3, newdata = da
 write_csv(dat, "./3_output/whole_dataset.csv")
 ```
 
-# GLM: LASSO
+# GLM: LASSO: bad performance
 
 ```{r}
 X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
@@ -156,7 +160,7 @@ coef(final_model)
 # write_csv(dat, "./3_output/lasso_dataset.csv")
 ```
 
-# Random Forest
+# Random Forest: bad performance
 
 ```{r}
 model_rf_1 <- randomForest(median_td_score ~ no_health_insurance + bachelor + 
@@ -180,4 +184,13 @@ print(model_rf_3)
 
 Comment: Only `model_rf_3` explains approx. 40% of the variance in the data.
 
-# SMOTE
+# Geographically Weighted Regression
+
+```{r}
+
+```
+
+
+# Inverse Distance Weighting
+
+# Kriging Interpolation

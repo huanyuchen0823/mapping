@@ -381,8 +381,9 @@ library(corrplot)</code></pre>
 <pre><code>## Loaded glmnet 4.1-8</code></pre>
 <div id="data-preparation" class="section level1">
 <h1>Data Preparation</h1>
-<pre class="r"><code># Census Data Preparation
-census &lt;- read_csv(&quot;./2_output/uhf_summary.csv&quot;)</code></pre>
+<div id="census-data-preparation" class="section level2">
+<h2>Census Data Preparation</h2>
+<pre class="r"><code>census &lt;- read_csv(&quot;./2_output/uhf_summary.csv&quot;)</code></pre>
 <pre><code>## Rows: 42 Columns: 15
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -396,10 +397,11 @@ census &lt;- census %&gt;%
   mutate_at(vars(3:15), ~ round((. / divisor_column * 100), 3)) %&gt;%
   rename_at(vars(3:15), ~ str_remove(., &quot;^total_&quot;))
 
-write_csv(census, &quot;./3_output/census_precentage.csv&quot;)
-
-# Merge with three scores
-scores &lt;- read_csv(&quot;./1_output/dat_merge_2_UHF&gt;=15.csv&quot;)</code></pre>
+write_csv(census, &quot;./3_output/census_precentage.csv&quot;)</code></pre>
+</div>
+<div id="merge-with-three-scores" class="section level2">
+<h2>Merge with three scores</h2>
+<pre class="r"><code>scores &lt;- read_csv(&quot;./1_output/dat_merge_2_UHF&gt;=15.csv&quot;)</code></pre>
 <pre><code>## Rows: 18 Columns: 11
 ## ── Column specification ────────────────────────────────────────────────────────
 ## Delimiter: &quot;,&quot;
@@ -412,8 +414,8 @@ scores &lt;- read_csv(&quot;./1_output/dat_merge_2_UHF&gt;=15.csv&quot;)</code><
   select(-c(total_population, ParticipantCount, mean_td_score, sd_td_score,
          mean_los_score, sd_los_score, mean_ag_score, sd_ag_score))</code></pre>
 </div>
-<div id="weighted-age" class="section level1">
-<h1>Weighted Age</h1>
+<div id="weighted-age" class="section level2">
+<h2>Weighted Age</h2>
 <pre class="r"><code>dat &lt;- dat %&gt;%
   mutate(weighted_age = (12 * ageunder25 +
                          27 * age25to29 +
@@ -427,8 +429,9 @@ scores &lt;- read_csv(&quot;./1_output/dat_merge_2_UHF&gt;=15.csv&quot;)</code><
 
 write_csv(dat, &quot;./3_output/merge_dataset.csv&quot;)</code></pre>
 </div>
-<div id="linear-regression-model" class="section level1">
-<h1>Linear Regression Model</h1>
+</div>
+<div id="linear-regression-model-good-performance" class="section level1">
+<h1>Linear Regression Model: good performance</h1>
 <div id="temporal-discounting" class="section level2">
 <h2>Temporal Discounting</h2>
 <pre class="r"><code>model_td &lt;- lm(median_td_score ~ no_health_insurance + bachelor +
@@ -630,8 +633,8 @@ dat[19:nrow(dat), &quot;median_los_score&quot;] &lt;- round(predict(model_los_3,
 write_csv(dat, &quot;./3_output/whole_dataset.csv&quot;)</code></pre>
 </div>
 </div>
-<div id="glm-lasso" class="section level1">
-<h1>GLM: LASSO</h1>
+<div id="glm-lasso-bad-performance" class="section level1">
+<h1>GLM: LASSO: bad performance</h1>
 <pre class="r"><code>X &lt;- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
                   householdincome + householdnum + no_vehicles + 
                   weighted_age + employment, data = dat[1:18, ])[,-1]
@@ -643,19 +646,19 @@ cv_lasso &lt;- cv.glmnet(X, y, alpha = 1)</code></pre>
 ## fold</code></pre>
 <pre class="r"><code>best_lambda &lt;- cv_lasso$lambda.min
 print(best_lambda)</code></pre>
-<pre><code>## [1] 1.241925</code></pre>
+<pre><code>## [1] 0.710675</code></pre>
 <pre class="r"><code>final_model &lt;- glmnet(X, y, family = &quot;gaussian&quot;, alpha = 1, lambda = best_lambda)
 coef(final_model)</code></pre>
 <pre><code>## 8 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
 ##                             s0
-## (Intercept)         74.1604241
-## no_health_insurance  .        
+## (Intercept)         79.6523673
+## no_health_insurance -0.1064875
 ## bachelor             .        
 ## householdincome      .        
 ## householdnum         .        
 ## no_vehicles          .        
 ## weighted_age         .        
-## employment          -0.1801704</code></pre>
+## employment          -0.2831293</code></pre>
 <pre class="r"><code># # predict
 # newX &lt;- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
 #                      householdincome + householdnum + no_vehicles + 
@@ -665,8 +668,8 @@ coef(final_model)</code></pre>
 # 
 # write_csv(dat, &quot;./3_output/lasso_dataset.csv&quot;)</code></pre>
 </div>
-<div id="random-forest" class="section level1">
-<h1>Random Forest</h1>
+<div id="random-forest-bad-performance" class="section level1">
+<h1>Random Forest: bad performance</h1>
 <pre class="r"><code>model_rf_1 &lt;- randomForest(median_td_score ~ no_health_insurance + bachelor + 
                            householdincome + householdnum + no_vehicles + 
                            weighted_age + employment, data = dat[1:18, ], 
@@ -681,8 +684,8 @@ coef(final_model)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##           Mean of squared residuals: 17.94222
-##                     % Var explained: -0.38</code></pre>
+##           Mean of squared residuals: 17.57244
+##                     % Var explained: 1.68</code></pre>
 <pre class="r"><code>model_rf_2 &lt;- randomForest(median_ag_score ~ no_health_insurance + bachelor + 
                            householdincome + householdnum + no_vehicles + 
                            weighted_age + employment, data = dat[1:18, ], 
@@ -695,8 +698,8 @@ print(model_rf_2)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##           Mean of squared residuals: 14.78767
-##                     % Var explained: -29.69</code></pre>
+##           Mean of squared residuals: 13.36989
+##                     % Var explained: -17.26</code></pre>
 <pre class="r"><code>model_rf_3 &lt;- randomForest(median_los_score ~ no_health_insurance + bachelor + 
                            householdincome + householdnum + no_vehicles + 
                            weighted_age + employment, data = dat[1:18, ], 
@@ -711,13 +714,19 @@ print(model_rf_2)</code></pre>
 ##                      Number of trees: 500
 ## No. of variables tried at each split: 2
 ## 
-##           Mean of squared residuals: 28.77453
-##                     % Var explained: 40.09</code></pre>
+##           Mean of squared residuals: 25.10004
+##                     % Var explained: 47.74</code></pre>
 <p>Comment: Only <code>model_rf_3</code> explains approx. 40% of the
 variance in the data.</p>
 </div>
-<div id="smote" class="section level1">
-<h1>SMOTE</h1>
+<div id="geographically-weighted-regression" class="section level1">
+<h1>Geographically Weighted Regression</h1>
+</div>
+<div id="inverse-distance-weighting" class="section level1">
+<h1>Inverse Distance Weighting</h1>
+</div>
+<div id="kriging-interpolation" class="section level1">
+<h1>Kriging Interpolation</h1>
 </div>
 
 

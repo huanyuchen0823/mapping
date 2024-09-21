@@ -462,9 +462,8 @@ uhf_pop_summary &lt;- merged_pop %&gt;%
 
 # write.csv(uhf_pop_summary, file = &quot;2_output/uhf_pop_summary.csv&quot;, row.names = FALSE)</code></pre>
 </div>
-</div>
-<div id="no-health-insurance" class="section level1">
-<h1>NO HEALTH INSURANCE</h1>
+<div id="no-health-insurance" class="section level2">
+<h2>No health insurance</h2>
 <pre class="r"><code>rows_with_no_insurance &lt;- v21[grep(&quot;No health insurance coverage&quot;, v21$label), ]
 sub_no_insurance &lt;- rows_with_no_insurance[rows_with_no_insurance$concept ==
                                              &quot;HEALTH INSURANCE COVERAGE STATUS BY SEX BY AGE&quot;,]
@@ -519,8 +518,8 @@ uhf_summary &lt;- merged %&gt;%
 #     total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE)
 #   )</code></pre>
 </div>
-<div id="education" class="section level1">
-<h1>Education</h1>
+<div id="education" class="section level2">
+<h2>Education</h2>
 <pre class="r"><code>bachelor &lt;- get_acs(geography = &quot;zcta&quot;,
                     variables = &#39;B06009_005&#39;,
                     year = 2021,
@@ -540,8 +539,8 @@ uhf_summary &lt;- merged %&gt;%
             total_no_health_insurance = sum(No_health_insurance, na.rm = TRUE),
             total_bachelor = sum(Bachelor, na.rm = TRUE))</code></pre>
 </div>
-<div id="household-income" class="section level1">
-<h1>Household Income</h1>
+<div id="household-income" class="section level2">
+<h2>Household Income</h2>
 <pre class="r"><code>householdincome &lt;- get_acs(geography = &quot;zcta&quot;,
                     variables = &#39;B19019_001&#39;,
                     year = 2021,
@@ -563,8 +562,8 @@ uhf_summary &lt;- merged %&gt;%
             total_householdincome = sum(Household_income, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="household-number" class="section level1">
-<h1>Household Number</h1>
+<div id="household-number" class="section level2">
+<h2>Household Number</h2>
 <pre class="r"><code>householdnum &lt;- get_acs(geography = &quot;zcta&quot;,
                     variables = &quot;B08201_001&quot;,
                     year = 2021,
@@ -587,8 +586,8 @@ uhf_summary &lt;- merged %&gt;%
             total_householdnum = sum(Household_num, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="no-vehicles" class="section level1">
-<h1>No Vehicles</h1>
+<div id="no-vehicles" class="section level2">
+<h2>No Vehicles</h2>
 <pre class="r"><code>no_vehicles &lt;- get_acs(geography = &quot;zcta&quot;,
                     variables = &quot;B08201_002&quot;,
                     year = 2021,
@@ -612,10 +611,10 @@ uhf_summary &lt;- merged %&gt;%
             total_no_vehicles = sum(No_vehicles, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="age" class="section level1">
-<h1>Age</h1>
-<div id="under-25" class="section level2">
-<h2>Under 25</h2>
+<div id="age" class="section level2">
+<h2>Age</h2>
+<div id="under-25" class="section level3">
+<h3>Under 25</h3>
 <pre class="r"><code>ageunder25_groups &lt;- c(
   &#39;B01001A_003&#39;, &#39;B01001A_018&#39;,
   &#39;B01001B_003&#39;, &#39;B01001B_018&#39;,
@@ -696,8 +695,8 @@ uhf_summary &lt;- merged %&gt;%
             total_ageunder25 = sum(Ageunder25, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="to-29" class="section level2">
-<h2>25 to 29</h2>
+<div id="to-29" class="section level3">
+<h3>25 to 29</h3>
 <pre class="r"><code>age25to29_groups &lt;- c(
   &#39;B01001A_009&#39;, &#39;B01001A_024&#39;,
   &#39;B01001B_009&#39;, &#39;B01001B_024&#39;,
@@ -740,8 +739,8 @@ uhf_summary &lt;- merged %&gt;%
             total_age25to29 = sum(Age25to29, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="to-34" class="section level2">
-<h2>30 to 34</h2>
+<div id="to-34" class="section level3">
+<h3>30 to 34</h3>
 <pre class="r"><code>age30to34_groups &lt;- c(
   &#39;B01001A_010&#39;, &#39;B01001A_025&#39;,
   &#39;B01001B_010&#39;, &#39;B01001B_025&#39;,
@@ -785,8 +784,8 @@ uhf_summary &lt;- merged %&gt;%
             total_age30to34 = sum(Age30to34, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="to-44" class="section level2">
-<h2>35 to 44</h2>
+<div id="to-44" class="section level3">
+<h3>35 to 44</h3>
 <pre class="r"><code>age35to44_groups &lt;- c(
   &#39;B01001A_011&#39;, &#39;B01001A_026&#39;,
   &#39;B01001B_011&#39;, &#39;B01001B_026&#39;,
@@ -831,8 +830,8 @@ uhf_summary &lt;- merged %&gt;%
             total_age35to44 = sum(Age35to44, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="to-54" class="section level2">
-<h2>45 to 54</h2>
+<div id="to-54" class="section level3">
+<h3>45 to 54</h3>
 <pre class="r"><code>age45to54_groups&lt;-c(
   &#39;B01001A_012&#39;, &#39;B01001A_027&#39;,
   &#39;B01001B_012&#39;, &#39;B01001B_027&#39;,
@@ -878,8 +877,8 @@ uhf_summary &lt;- merged %&gt;%
             total_age45to54 = sum(Age45to54, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="to-64" class="section level2">
-<h2>55 to 64</h2>
+<div id="to-64" class="section level3">
+<h3>55 to 64</h3>
 <pre class="r"><code>age55to64_groups &lt;- c(
   &#39;B01001A_013&#39;, &#39;B01001A_028&#39;,
   &#39;B01001B_013&#39;, &#39;B01001B_028&#39;,
@@ -924,8 +923,8 @@ uhf_summary &lt;- merged %&gt;%
             total_age55to64 = sum(Age55to64, na.rm = TRUE)
   )</code></pre>
 </div>
-<div id="above-65" class="section level2">
-<h2>Above 65</h2>
+<div id="above-65" class="section level3">
+<h3>Above 65</h3>
 <pre class="r"><code>age_above65_groups &lt;- c(
   # Age 65 to 74
   &#39;B01001A_014&#39;, &#39;B01001A_029&#39;,
@@ -992,8 +991,8 @@ uhf_summary &lt;- merged %&gt;%
   )</code></pre>
 </div>
 </div>
-<div id="employment" class="section level1">
-<h1>Employment</h1>
+<div id="employment" class="section level2">
+<h2>Employment</h2>
 <pre class="r"><code>employment &lt;- get_acs(geography = &quot;zcta&quot;,
                     variables = &quot;B27011_003&quot;,
                     year = 2021,
@@ -1026,6 +1025,7 @@ uhf_summary &lt;- merged %&gt;%
   )
 
 write.csv(uhf_summary, file = &quot;2_output/uhf_summary.csv&quot;, row.names = FALSE)</code></pre>
+</div>
 </div>
 
 

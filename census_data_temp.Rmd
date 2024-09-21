@@ -96,7 +96,7 @@ uhf_pop_summary <- merged_pop %>%
 # write.csv(uhf_pop_summary, file = "2_output/uhf_pop_summary.csv", row.names = FALSE)
 ```
 
-# NO HEALTH INSURANCE
+## No health insurance
 
 ```{r}
 rows_with_no_insurance <- v21[grep("No health insurance coverage", v21$label), ]
@@ -142,7 +142,7 @@ uhf_summary <- merged %>%
 #   )
 ```
 
-# Education
+## Education
 
 ```{r}
 bachelor <- get_acs(geography = "zcta",
@@ -165,7 +165,7 @@ uhf_summary <- merged %>%
             total_bachelor = sum(Bachelor, na.rm = TRUE))
 ```
 
-# Household Income
+## Household Income
 
 ```{r}
 householdincome <- get_acs(geography = "zcta",
@@ -190,7 +190,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-# Household Number
+## Household Number
 
 ```{r}
 householdnum <- get_acs(geography = "zcta",
@@ -216,7 +216,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-# No Vehicles
+## No Vehicles
 
 ```{r}
 no_vehicles <- get_acs(geography = "zcta",
@@ -243,9 +243,9 @@ uhf_summary <- merged %>%
   )
 ```
 
-# Age
+## Age
 
-## Under 25
+### Under 25
 
 ```{r}
 ageunder25_groups <- c(
@@ -329,7 +329,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## 25 to 29
+### 25 to 29
 
 ```{r}
 age25to29_groups <- c(
@@ -375,7 +375,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## 30 to 34
+### 30 to 34
 
 ```{r}
 age30to34_groups <- c(
@@ -422,7 +422,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## 35 to 44
+### 35 to 44
 
 ```{r}
 age35to44_groups <- c(
@@ -470,7 +470,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## 45 to 54
+### 45 to 54
 
 ```{r}
 age45to54_groups<-c(
@@ -519,7 +519,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## 55 to 64
+### 55 to 64
 
 ```{r}
 age55to64_groups <- c(
@@ -567,7 +567,7 @@ uhf_summary <- merged %>%
   )
 ```
 
-## Above 65
+### Above 65
 
 ```{r}
 age_above65_groups <- c(
@@ -637,7 +637,8 @@ uhf_summary <- merged %>%
 
 ```
 
-# Employment
+## Employment
+
 ```{r}
 employment <- get_acs(geography = "zcta",
                     variables = "B27011_003",
