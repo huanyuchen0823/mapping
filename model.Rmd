@@ -11,6 +11,10 @@ library(stringr)
 library(corrplot)
 library(randomForest)
 library(glmnet)
+library(sf)
+library(spgwr)
+library(GWmodel)
+library(sf)
 ```
 
 
@@ -56,15 +60,41 @@ dat <- dat %>%
 write_csv(dat, "./3_output/merge_dataset.csv")
 ```
 
+## Geographic Data
+```{r}
+geo_data <- st_read("./UHF_42_DOHMH_2009/UHF_42_DOHMH_2009.shp")
+```
 
-# Linear Regression Model: good performance
+# Correlation Plot
+
+<!-- ## 7 variables -->
+
+```{r}
+dat_selected <- dat %>%
+  select(no_health_insurance, bachelor, householdincome, householdnum,
+         no_vehicles, weighted_age, employment)
+
+corr_matrix <- cor(dat_selected, use = "complete.obs")
+corrplot(corr_matrix, method = "number", type = "full", tl.col = "black")
+```
+
+<!-- ## 5 variables: exclude bachelor and household number -->
+
+<!-- ```{r} -->
+<!-- dat_selected <- dat %>% -->
+<!--   select(no_health_insurance, householdincome, no_vehicles, weighted_age, employment) -->
+
+<!-- corr_matrix <- cor(dat_selected, use = "complete.obs") -->
+<!-- corrplot(corr_matrix, method = "number", type = "full", tl.col = "black") -->
+<!-- ``` -->
+
+# Linear Regression Model
 
 ## Temporal Discounting
 
 ```{r}
-model_td <- lm(median_td_score ~ no_health_insurance + bachelor +
-               householdincome + householdnum + no_vehicles +
-               weighted_age + employment, data = dat)
+model_td <- lm(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment, data = dat)
 summary(model_td)
 
 par(mfrow = c(2, 2))
@@ -76,9 +106,8 @@ mean(model_td$residuals^2)
 ## Agency
 
 ```{r}
-model_ag <- lm(median_ag_score ~ no_health_insurance + bachelor +
-               householdincome + householdnum + no_vehicles +
-               weighted_age + employment, data = dat)
+model_ag <- lm(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment, data = dat)
 summary(model_ag)
 
 par(mfrow = c(2, 2))
@@ -90,25 +119,17 @@ mean(model_ag$residuals^2)
 ## Loss Aversion
 
 ```{r}
-# full model
-model_los_1 <- lm(median_los_score ~ no_health_insurance + bachelor +
-               householdincome + householdnum + no_vehicles +
-               weighted_age + employment, data = dat)
-summary(model_los_1)
-
-# correlation plot
-dat_selected <- dat %>%
-  select(no_health_insurance, bachelor, householdincome, householdnum,
-         no_vehicles, weighted_age, employment)
-
-corr_matrix <- cor(dat_selected, use = "complete.obs")
-corrplot(corr_matrix, method = "number", type = "lower", tl.col = "black")
-
-# model excluding bachelor
-model_los_2 <- lm(median_los_score ~ no_health_insurance + 
-               householdincome + householdnum + no_vehicles +
-               weighted_age + employment, data = dat)
-summary(model_los_2)
+# # full model
+# model_los_1 <- lm(median_los_score ~ no_health_insurance + bachelor +
+#                householdincome + householdnum + no_vehicles +
+#                weighted_age + employment, data = dat)
+# summary(model_los_1)
+# 
+# # model excluding bachelor
+# model_los_2 <- lm(median_los_score ~ no_health_insurance + 
+#                householdincome + householdnum + no_vehicles +
+#                weighted_age + employment, data = dat)
+# summary(model_los_2)
 
 # model excluding bachelor and household number
 model_los_3 <- lm(median_los_score ~ no_health_insurance + householdincome + 
@@ -133,22 +154,19 @@ dat[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3, newdata = da
 write_csv(dat, "./3_output/whole_dataset.csv")
 ```
 
-# GLM: LASSO: bad performance
+# GLM: LASSO
 
 ```{r}
-X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
-                  householdincome + householdnum + no_vehicles + 
-                  weighted_age + employment, data = dat[1:18, ])[,-1]
+set.seed(1)
+X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment,
+                 data = dat[1:18, ])[,-1]
 y <- dat[1:18, ]$median_td_score
 
-lasso_model <- glmnet(X, y, alpha = 1)
-cv_lasso <- cv.glmnet(X, y, alpha = 1)
-
-best_lambda <- cv_lasso$lambda.min
-print(best_lambda)
-
-final_model <- glmnet(X, y, family = "gaussian", alpha = 1, lambda = best_lambda)
-coef(final_model)
+cv.lasso <- cv.glmnet(X, y, alpha = 1, lambda = exp(seq(2, 0, length = 100)))
+plot(cv.lasso)
+selected_lambda <- cv.lasso$lambda.min
+coef(cv.lasso, s = selected_lambda)
 
 # # predict
 # newX <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
@@ -160,24 +178,25 @@ coef(final_model)
 # write_csv(dat, "./3_output/lasso_dataset.csv")
 ```
 
-# Random Forest: bad performance
+# Random Forest
 
 ```{r}
-model_rf_1 <- randomForest(median_td_score ~ no_health_insurance + bachelor + 
-                           householdincome + householdnum + no_vehicles + 
-                           weighted_age + employment, data = dat[1:18, ], 
+set.seed(1)
+model_rf_1 <- randomForest(median_td_score ~ no_health_insurance +
+                             householdincome + no_vehicles + weighted_age +
+                             employment, data = dat[1:18, ], 
                          importance = TRUE)
 print(model_rf_1)
 
-model_rf_2 <- randomForest(median_ag_score ~ no_health_insurance + bachelor + 
-                           householdincome + householdnum + no_vehicles + 
-                           weighted_age + employment, data = dat[1:18, ], 
+model_rf_2 <- randomForest(median_ag_score ~ no_health_insurance +
+                             householdincome + no_vehicles + weighted_age +
+                             employment, data = dat[1:18, ], 
                          importance = TRUE)
 print(model_rf_2)
 
-model_rf_3 <- randomForest(median_los_score ~ no_health_insurance + bachelor + 
-                           householdincome + householdnum + no_vehicles + 
-                           weighted_age + employment, data = dat[1:18, ], 
+model_rf_3 <- randomForest(median_los_score ~ no_health_insurance +
+                             householdincome + no_vehicles + weighted_age +
+                             employment, data = dat[1:18, ], 
                          importance = TRUE)
 print(model_rf_3)
 ```
@@ -187,9 +206,88 @@ Comment: Only `model_rf_3` explains approx. 40% of the variance in the data.
 # Geographically Weighted Regression
 
 ```{r}
+geo_data <- geo_data %>%
+  left_join(dat, by = c("UHFCODE" = "UHF_id")) %>%
+  slice(-1)
 
+sp_data <- as_Spatial(st_cast(geo_data, "POLYGON"))
 ```
 
+## Temporal Discounting
+
+```{r}
+bwG_td <- gwr.sel(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                    householdnum + no_vehicles + weighted_age + employment, 
+                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+
+gwrG_td <- gwr(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment,
+               data = sp_data,
+               bandwidth = bwG_td, 
+               gweight = gwr.Gauss, 
+               hatmatrix = TRUE)
+gwrG_td
+```
+
+## Agency
+
+```{r}
+bwG_ag <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                    householdnum + no_vehicles + weighted_age + employment, 
+                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+
+gwrG_ag <- gwr(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment,
+               data = sp_data,
+               bandwidth = bwG_ag, 
+               gweight = gwr.Gauss, 
+               hatmatrix = TRUE)
+gwrG_ag
+```
+
+## Loss Aversion
+
+```{r}
+bwG_los <- gwr.sel(median_los_score ~ no_health_insurance + bachelor + householdincome + 
+                    householdnum + no_vehicles + weighted_age + employment, 
+                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+
+gwrG_los <- gwr(median_los_score ~ no_health_insurance + bachelor + householdincome + 
+                 householdnum + no_vehicles + weighted_age + employment,
+               data = sp_data,
+               bandwidth = bwG_los, 
+               gweight = gwr.Gauss, 
+               hatmatrix = TRUE)
+gwrG_los
+```
+
+## Plot
+
+```{r}
+sp_data$median_td_score_fitted <- gwrG_td$lhat[, 1]
+
+colors <- c("white", "darkred")
+spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)(100),
+       cuts = 5, main = "Fitted Median Temporal Discounting Score")
+
+sp_data$median_ag_score_fitted <- gwrG_ag$lhat[, 1]
+
+colors <- c("white", "darkblue")
+spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(100), 
+       cuts = 5, main = "Fitted Median Agency Score")
+
+sp_data$median_los_score_fitted <- gwrG_los$lhat[, 1]
+
+colors <- c("white", "darkgreen")
+spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(100),
+       cuts = 5, main = "Fitted Median Loss Aversion Score")
+```
+
+```{r}
+pairs(as.data.frame(gwrG_td$lhat)[, 2:8])
+pairs(as.data.frame(gwrG_ag$lhat)[, 2:8])
+pairs(as.data.frame(gwrG_los$lhat)[, 2:8])
+```
 
 # Inverse Distance Weighting
 
