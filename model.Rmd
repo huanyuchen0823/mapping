@@ -14,7 +14,7 @@ library(glmnet)
 library(sf)
 library(spgwr)
 library(GWmodel)
-library(sf)
+library(sp)
 ```
 
 
@@ -55,14 +55,17 @@ dat <- dat %>%
                          59.5 * age55to64 +
                          80 * age_above65) / 100,
          weighted_age = round(weighted_age, 3)) %>%
-  select(-ageunder25, -age25to29, -age30to34, -age35to44, -age45to54, -age55to64, -age_above65)
+  select(-ageunder25, -age25to29, -age30to34, -age35to44, -age45to54, -age55to64,
+         -age_above65)
 
 write_csv(dat, "./3_output/merge_dataset.csv")
 ```
 
 ## Geographic Data
+
 ```{r}
 geo_data <- st_read("./UHF_42_DOHMH_2009/UHF_42_DOHMH_2009.shp")
+# train_dat <- subset(dat[1:nrow(dat), ], !is.na(median_td_score))
 ```
 
 # Correlation Plot
@@ -145,13 +148,17 @@ mean(model_los_3$residuals^2)
 ## Prediction
 
 ```{r}
+dat_slr <- dat
 dat_subset <- dat[19:nrow(dat), ]
 
-dat[19:nrow(dat), "median_td_score"] <- round(predict(model_td, newdata = dat_subset), 2)
-dat[19:nrow(dat), "median_ag_score"] <- round(predict(model_ag, newdata = dat_subset), 2)
-dat[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3, newdata = dat_subset), 2)
+dat_slr[19:nrow(dat), "median_td_score"] <- round(predict(model_td,
+                                                          newdata = dat_subset), 2)
+dat_slr[19:nrow(dat), "median_ag_score"] <- round(predict(model_ag,
+                                                          newdata = dat_subset), 2)
+dat_slr[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3,
+                                                           newdata = dat_subset), 2)
 
-write_csv(dat, "./3_output/whole_dataset.csv")
+write_csv(dat_slr, "./3_output/whole_dataset.csv")
 ```
 
 # GLM: LASSO
@@ -216,13 +223,16 @@ sp_data <- as_Spatial(st_cast(geo_data, "POLYGON"))
 ## Temporal Discounting
 
 ```{r}
+sp_data_train <- sp_data[!is.na(sp_data$median_los_score), ]
+sp_data_predict <- sp_data[is.na(sp_data$median_los_score), ]
+
 bwG_td <- gwr.sel(median_td_score ~ no_health_insurance + bachelor + householdincome + 
                     householdnum + no_vehicles + weighted_age + employment, 
-                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+                  data = sp_data_train, adapt = FALSE, gweight = gwr.Gauss)
 
 gwrG_td <- gwr(median_td_score ~ no_health_insurance + bachelor + householdincome + 
                  householdnum + no_vehicles + weighted_age + employment,
-               data = sp_data,
+               data = sp_data_train,
                bandwidth = bwG_td, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
@@ -234,53 +244,53 @@ gwrG_td
 ```{r}
 bwG_ag <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
                     householdnum + no_vehicles + weighted_age + employment, 
-                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+                  data = sp_data_train, adapt = FALSE, gweight = gwr.Gauss, verbose = FALSE)
 
 gwrG_ag <- gwr(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
                  householdnum + no_vehicles + weighted_age + employment,
-               data = sp_data,
+               data = sp_data_train,
                bandwidth = bwG_ag, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
-gwrG_ag
+# gwrG_ag
 ```
 
 ## Loss Aversion
 
 ```{r}
-bwG_los <- gwr.sel(median_los_score ~ no_health_insurance + bachelor + householdincome + 
+bwG_ag <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
                     householdnum + no_vehicles + weighted_age + employment, 
-                  data = sp_data, gweight = gwr.Gauss, verbose = FALSE)
+                  data = sp_data_train, adapt = FALSE, gweight = gwr.Gauss, verbose = FALSE)
 
 gwrG_los <- gwr(median_los_score ~ no_health_insurance + bachelor + householdincome + 
-                 householdnum + no_vehicles + weighted_age + employment,
-               data = sp_data,
-               bandwidth = bwG_los, 
-               gweight = gwr.Gauss, 
-               hatmatrix = TRUE)
-gwrG_los
+                householdnum + no_vehicles + weighted_age + employment,
+                data = sp_data_train,
+                bandwidth = bwG_ag, 
+                gweight = gwr.Gauss, 
+                hatmatrix = TRUE)
+# gwrG_los
 ```
 
-## Plot
+## Existing Data Plot & Performance
 
 ```{r}
-sp_data$median_td_score_fitted <- gwrG_td$lhat[, 1]
+sp_data_train$median_td_score_fitted <- gwrG_td$SDF$pred
 
 colors <- c("white", "darkred")
-spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)(100),
-       cuts = 5, main = "Fitted Median Temporal Discounting Score")
+spplot(sp_data_train, "median_td_score_fitted", col.regions = colorRampPalette(colors)(60),
+       cuts = 30, main = "Fitted Median Temporal Discounting Score")
 
-sp_data$median_ag_score_fitted <- gwrG_ag$lhat[, 1]
+sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
 
 colors <- c("white", "darkblue")
-spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(100), 
-       cuts = 5, main = "Fitted Median Agency Score")
+spplot(sp_data_train, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60), 
+       cuts = 30, main = "Fitted Median Agency Score")
 
-sp_data$median_los_score_fitted <- gwrG_los$lhat[, 1]
+sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
 
 colors <- c("white", "darkgreen")
-spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(100),
-       cuts = 5, main = "Fitted Median Loss Aversion Score")
+spplot(sp_data_train, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
+       cuts = 30, main = "Fitted Median Loss Aversion Score")
 ```
 
 ```{r}
@@ -288,6 +298,93 @@ pairs(as.data.frame(gwrG_td$lhat)[, 2:8])
 pairs(as.data.frame(gwrG_ag$lhat)[, 2:8])
 pairs(as.data.frame(gwrG_los$lhat)[, 2:8])
 ```
+
+## Prediction
+```{r}
+train_coords <- coordinates(sp_data_train)
+predict_coords <- coordinates(sp_data_predict)
+predictions <- numeric(nrow(sp_data_predict))
+local_coefficients <- gwrG_td$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                           "householdincome", "householdnum", "no_vehicles", 
+                                           "weighted_age", "employment")]
+
+for (i in 1:nrow(sp_data_predict)) {
+  dists <- spDistsN1(train_coords, predict_coords[i, ], longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff <- local_coefficients[nearest_index, ]
+  pred_vars <- as.numeric(c(1, sp_data_predict@data[i, c("no_health_insurance", "bachelor", 
+                                                         "householdincome", "householdnum", 
+                                                         "no_vehicles", "weighted_age", 
+                                                         "employment")]))
+  predictions[i] <- sum(pred_vars * local_coeff)
+}
+
+sp_data_predict$median_td_score_fitted <- predictions
+```
+
+```{r}
+predictions_ag <- numeric(nrow(sp_data_predict))
+local_coefficients <- gwrG_ag$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                           "householdincome", "householdnum", "no_vehicles", 
+                                           "weighted_age", "employment")]
+
+for (i in 1:nrow(sp_data_predict)) {
+  dists <- spDistsN1(train_coords, predict_coords[i, ], longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff_ag <- local_coefficients[nearest_index, ]
+  pred_vars_ag <- as.numeric(c(1, sp_data_predict@data[i, c("no_health_insurance", "bachelor", 
+                                                         "householdincome", "householdnum", 
+                                                         "no_vehicles", "weighted_age", 
+                                                         "employment")]))
+  predictions_ag[i] <- sum(pred_vars_ag * local_coeff_ag)
+}
+
+sp_data_predict$median_ag_score_fitted <- predictions_ag
+```
+
+```{r}
+predictions_los <- numeric(nrow(sp_data_predict))
+local_coefficients <- gwrG_los$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                           "householdincome", "householdnum", "no_vehicles", 
+                                           "weighted_age", "employment")]
+
+for (i in 1:nrow(sp_data_predict)) {
+  dists <- spDistsN1(train_coords, predict_coords[i, ], longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff_los <- local_coefficients[nearest_index, ]
+  pred_vars_los <- as.numeric(c(1, sp_data_predict@data[i, c("no_health_insurance",
+                                                             "bachelor",
+                                                             "householdincome",
+                                                             "householdnum",
+                                                             "no_vehicles",
+                                                             "weighted_age",
+                                                             "employment")]))
+  predictions_los[i] <- sum(pred_vars_los * local_coeff_los)
+}
+
+sp_data_predict$median_los_score_fitted <- predictions_los
+```
+
+```{r}
+sp_data <- rbind(sp_data_train, sp_data_predict)
+
+colors <- c("white", "darkred")
+spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)(60),
+       cuts = 30, main = "Fitted Median Temporal Discounting Score")
+
+sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
+
+colors <- c("white", "darkblue")
+spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60), 
+       cuts = 30, main = "Fitted Median Agency Score")
+
+sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
+
+colors <- c("white", "darkgreen")
+spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
+       cuts = 30, main = "Fitted Median Loss Aversion Score")
+```
+
 
 # Inverse Distance Weighting
 
