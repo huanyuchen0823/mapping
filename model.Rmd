@@ -218,14 +218,29 @@ geo_data <- geo_data %>%
   slice(-1)
 
 sp_data <- as_Spatial(st_cast(geo_data, "POLYGON"))
+sp_data_train <- sp_data[!is.na(sp_data$median_los_score), ]
+sp_data_predict <- sp_data[is.na(sp_data$median_los_score), ]
+```
+
+## Data Visualization
+
+```{r}
+colors <- c("white", "darkred")
+spplot(sp_data_train, "median_td_score", col.regions = colorRampPalette(colors)(60),
+       cuts = 50, main = "Median Temporal Discounting Score")
+
+colors <- c("white", "darkblue")
+spplot(sp_data_train, "median_ag_score", col.regions = colorRampPalette(colors)(60), 
+       cuts = 50, main = "Median Agency Score")
+
+colors <- c("white", "darkgreen")
+spplot(sp_data_train, "median_los_score", col.regions = colorRampPalette(colors)(60),
+       cuts = 50, main = "Median Loss Aversion Score")
 ```
 
 ## Temporal Discounting
 
 ```{r}
-sp_data_train <- sp_data[!is.na(sp_data$median_los_score), ]
-sp_data_predict <- sp_data[is.na(sp_data$median_los_score), ]
-
 bwG_td <- gwr.sel(median_td_score ~ no_health_insurance + bachelor + householdincome + 
                     householdnum + no_vehicles + weighted_age + employment, 
                   data = sp_data_train, adapt = FALSE, gweight = gwr.Gauss)
@@ -271,27 +286,7 @@ gwrG_los <- gwr(median_los_score ~ no_health_insurance + bachelor + householdinc
 gwrG_los
 ```
 
-## Existing Data Plot & Performance
-
-```{r}
-sp_data_train$median_td_score_fitted <- gwrG_td$SDF$pred
-
-colors <- c("white", "darkred")
-spplot(sp_data_train, "median_td_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 30, main = "Fitted Median Temporal Discounting Score")
-
-sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
-
-colors <- c("white", "darkblue")
-spplot(sp_data_train, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60), 
-       cuts = 30, main = "Fitted Median Agency Score")
-
-sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
-
-colors <- c("white", "darkgreen")
-spplot(sp_data_train, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 30, main = "Fitted Median Loss Aversion Score")
-```
+## Performance
 
 ```{r}
 pairs(as.data.frame(gwrG_td$lhat)[, 2:8])
@@ -366,23 +361,27 @@ sp_data_predict$median_los_score_fitted <- predictions_los
 ```
 
 ```{r}
+sp_data_train$median_td_score_fitted <- gwrG_td$SDF$pred
+sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
+sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
+
 sp_data <- rbind(sp_data_train, sp_data_predict)
 
 colors <- c("white", "darkred")
 spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 30, main = "Fitted Median Temporal Discounting Score")
+       cuts = 50, main = "Fitted Median Temporal Discounting Score")
 
 sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
 
 colors <- c("white", "darkblue")
 spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60), 
-       cuts = 30, main = "Fitted Median Agency Score")
+       cuts = 50, main = "Fitted Median Agency Score")
 
 sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
 
 colors <- c("white", "darkgreen")
 spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 30, main = "Fitted Median Loss Aversion Score")
+       cuts = 50, main = "Fitted Median Loss Aversion Score")
 ```
 
 
