@@ -238,7 +238,9 @@ spplot(sp_data_train, "median_los_score", col.regions = colorRampPalette(colors)
        cuts = 50, main = "Median Loss Aversion Score")
 ```
 
-## Temporal Discounting
+## Model
+
+### Temporal Discounting
 
 ```{r}
 bwG_td <- gwr.sel(median_td_score ~ no_health_insurance + bachelor + householdincome + 
@@ -251,10 +253,12 @@ gwrG_td <- gwr(median_td_score ~ no_health_insurance + bachelor + householdincom
                bandwidth = bwG_td, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
+
 gwrG_td
+gwrG_td$results
 ```
 
-## Agency
+### Agency
 
 ```{r}
 bwG_ag <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
@@ -267,10 +271,12 @@ gwrG_ag <- gwr(median_ag_score ~ no_health_insurance + bachelor + householdincom
                bandwidth = bwG_ag, 
                gweight = gwr.Gauss, 
                hatmatrix = TRUE)
+
 gwrG_ag
+gwrG_ag$results
 ```
 
-## Loss Aversion
+### Loss Aversion
 
 ```{r}
 bwG_ag <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
@@ -284,15 +290,39 @@ gwrG_los <- gwr(median_los_score ~ no_health_insurance + bachelor + householdinc
                 gweight = gwr.Gauss, 
                 hatmatrix = TRUE)
 gwrG_los
+gwrG_los$results
 ```
 
 ## Performance
 
+### Multicollinearity
+
 ```{r}
 pairs(as.data.frame(gwrG_td$lhat)[, 2:8])
+
 pairs(as.data.frame(gwrG_ag$lhat)[, 2:8])
+
 pairs(as.data.frame(gwrG_los$lhat)[, 2:8])
 ```
+
+### Model Fit
+
+```{r}
+# https://crd230.github.io/gwr.html
+
+BFC99.gwr.test(gwrG_td)
+LMZ.F3GWR.test(gwrG_td)
+
+BFC99.gwr.test(gwrG_ag)
+LMZ.F3GWR.test(gwrG_ag)
+
+# BFC02.gwr.test(gwrG_los)
+# LMZ.F1GWR.test(gwrG_los)
+# LMZ.F2GWR.test(gwrG_los)
+BFC99.gwr.test(gwrG_los)
+LMZ.F3GWR.test(gwrG_los)
+```
+
 
 ## Prediction
 ```{r}
