@@ -226,16 +226,22 @@ sp_data_predict <- sp_data[is.na(sp_data$median_los_score), ]
 
 ```{r}
 colors <- c("white", "darkred")
-spplot(sp_data_train, "median_td_score", col.regions = colorRampPalette(colors)(60),
-       cuts = 50, main = "Median Temporal Discounting Score")
+spplot(sp_data_train, "median_td_score", 
+       col.regions = colorRampPalette(colors)(60),
+       at = seq(40, 90, length.out = 60), 
+       main = "Median Temporal Discounting Score")
 
 colors <- c("white", "darkblue")
-spplot(sp_data_train, "median_ag_score", col.regions = colorRampPalette(colors)(60), 
-       cuts = 50, main = "Median Agency Score")
+spplot(sp_data_train, "median_ag_score", 
+       col.regions = colorRampPalette(colors)(60),
+       at = seq(40, 90, length.out = 60), 
+       main = "Median Agency Score")
 
 colors <- c("white", "darkgreen")
-spplot(sp_data_train, "median_los_score", col.regions = colorRampPalette(colors)(60),
-       cuts = 50, main = "Median Loss Aversion Score")
+spplot(sp_data_train, "median_los_score", 
+       col.regions = colorRampPalette(colors)(60),
+       at = seq(40, 90, length.out = 60), 
+       main = "Median Loss Aversion Score")
 ```
 
 ## Model
@@ -397,21 +403,34 @@ sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
 
 sp_data <- rbind(sp_data_train, sp_data_predict)
 
+highlight_ids <- c(104, 105, 205, 207, 208, 211, 301, 303, 304, 
+                   306, 309, 310, 401, 405, 407, 408, 501, 502)
+highlighted_data <- sp_data_train[sp_data_train$UHFCODE %in% highlight_ids, ]
+
 colors <- c("white", "darkred")
 spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 50, main = "Fitted Median Temporal Discounting Score")
+       at = seq(40, 90, length.out = 60),
+       sp.layout = list("sp.polygons", highlighted_data, col = "black", lwd = 2,
+                        fill = NA, first = FALSE), 
+       main = "Fitted Median Temporal Discounting Score")
 
 sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
 
 colors <- c("white", "darkblue")
-spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60), 
-       cuts = 50, main = "Fitted Median Agency Score")
+spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60),
+       at = seq(40, 90, length.out = 60),
+       sp.layout = list("sp.polygons", highlighted_data, col = "black", lwd = 2,
+                        fill = NA, first = FALSE), 
+       main = "Fitted Median Agency Score")
 
 sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
 
 colors <- c("white", "darkgreen")
 spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
-       cuts = 50, main = "Fitted Median Loss Aversion Score")
+       at = seq(40, 90, length.out = 60),
+       sp.layout = list("sp.polygons", highlighted_data, col = "black", lwd = 2,
+                        fill = NA, first = FALSE), 
+       main = "Fitted Median Loss Aversion Score")
 ```
 
 
