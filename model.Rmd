@@ -15,6 +15,7 @@ library(sf)
 library(spgwr)
 library(GWmodel)
 library(sp)
+library(ggplot2)
 ```
 
 
@@ -158,57 +159,57 @@ dat_slr[19:nrow(dat), "median_ag_score"] <- round(predict(model_ag,
 dat_slr[19:nrow(dat), "median_los_score"] <- round(predict(model_los_3,
                                                            newdata = dat_subset), 2)
 
-write_csv(dat_slr, "./3_output/whole_dataset.csv")
+write_csv(dat_slr, "./3_output/SLR_whole_dataset.csv")
 ```
 
-# GLM: LASSO
+<!-- # GLM: LASSO -->
 
-```{r}
-set.seed(1)
-X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + householdincome + 
-                 householdnum + no_vehicles + weighted_age + employment,
-                 data = dat[1:18, ])[,-1]
-y <- dat[1:18, ]$median_td_score
+<!-- ```{r} -->
+<!-- set.seed(1) -->
+<!-- X <- model.matrix(median_td_score ~ no_health_insurance + bachelor + householdincome +  -->
+<!--                  householdnum + no_vehicles + weighted_age + employment, -->
+<!--                  data = dat[1:18, ])[,-1] -->
+<!-- y <- dat[1:18, ]$median_td_score -->
 
-cv.lasso <- cv.glmnet(X, y, alpha = 1, lambda = exp(seq(2, 0, length = 100)))
-plot(cv.lasso)
-selected_lambda <- cv.lasso$lambda.min
-coef(cv.lasso, s = selected_lambda)
+<!-- cv.lasso <- cv.glmnet(X, y, alpha = 1, lambda = exp(seq(2, 0, length = 100))) -->
+<!-- plot(cv.lasso) -->
+<!-- selected_lambda <- cv.lasso$lambda.min -->
+<!-- coef(cv.lasso, s = selected_lambda) -->
 
-# # predict
-# newX <- model.matrix(median_td_score ~ no_health_insurance + bachelor + 
-#                      householdincome + householdnum + no_vehicles + 
-#                      weighted_age + employment, data = dat[19:nrow(dat), ])[,-1]
-# 
-# dat[19:nrow(dat), "median_los_score"] <- predict(final_model, newx = newX, s = best_lambda)
-# 
-# write_csv(dat, "./3_output/lasso_dataset.csv")
-```
+<!-- # # predict -->
+<!-- # newX <- model.matrix(median_td_score ~ no_health_insurance + bachelor +  -->
+<!-- #                      householdincome + householdnum + no_vehicles +  -->
+<!-- #                      weighted_age + employment, data = dat[19:nrow(dat), ])[,-1] -->
+<!-- #  -->
+<!-- # dat[19:nrow(dat), "median_los_score"] <- predict(final_model, newx = newX, s = best_lambda) -->
+<!-- #  -->
+<!-- # write_csv(dat, "./3_output/lasso_dataset.csv") -->
+<!-- ``` -->
 
-# Random Forest
+<!-- # Random Forest -->
 
-```{r}
-set.seed(1)
-model_rf_1 <- randomForest(median_td_score ~ no_health_insurance +
-                             householdincome + no_vehicles + weighted_age +
-                             employment, data = dat[1:18, ], 
-                         importance = TRUE)
-print(model_rf_1)
+<!-- ```{r} -->
+<!-- set.seed(1) -->
+<!-- model_rf_1 <- randomForest(median_td_score ~ no_health_insurance + -->
+<!--                              householdincome + no_vehicles + weighted_age + -->
+<!--                              employment, data = dat[1:18, ],  -->
+<!--                          importance = TRUE) -->
+<!-- print(model_rf_1) -->
 
-model_rf_2 <- randomForest(median_ag_score ~ no_health_insurance +
-                             householdincome + no_vehicles + weighted_age +
-                             employment, data = dat[1:18, ], 
-                         importance = TRUE)
-print(model_rf_2)
+<!-- model_rf_2 <- randomForest(median_ag_score ~ no_health_insurance + -->
+<!--                              householdincome + no_vehicles + weighted_age + -->
+<!--                              employment, data = dat[1:18, ],  -->
+<!--                          importance = TRUE) -->
+<!-- print(model_rf_2) -->
 
-model_rf_3 <- randomForest(median_los_score ~ no_health_insurance +
-                             householdincome + no_vehicles + weighted_age +
-                             employment, data = dat[1:18, ], 
-                         importance = TRUE)
-print(model_rf_3)
-```
+<!-- model_rf_3 <- randomForest(median_los_score ~ no_health_insurance + -->
+<!--                              householdincome + no_vehicles + weighted_age + -->
+<!--                              employment, data = dat[1:18, ],  -->
+<!--                          importance = TRUE) -->
+<!-- print(model_rf_3) -->
+<!-- ``` -->
 
-Comment: Only `model_rf_3` explains approx. 40% of the variance in the data.
+<!-- Comment: Only `model_rf_3` explains approx. 40% of the variance in the data. -->
 
 # Geographically Weighted Regression
 
@@ -217,9 +218,12 @@ geo_data <- geo_data %>%
   left_join(dat, by = c("UHFCODE" = "UHF_id")) %>%
   slice(-1)
 
-sp_data <- as_Spatial(st_cast(geo_data, "POLYGON"))
-sp_data_train <- sp_data[!is.na(sp_data$median_los_score), ]
-sp_data_predict <- sp_data[is.na(sp_data$median_los_score), ]
+polygon_data <- st_cast(geo_data, "POLYGON")
+polygon_data$attribute <- geo_data$attribute
+sp_data <- as_Spatial(polygon_data)
+# sp_data <- as_Spatial(st_cast(geo_data, "POLYGON"))
+sp_data_train <- sp_data[!is.na(sp_data$median_ag_score), ]
+sp_data_predict <- sp_data[is.na(sp_data$median_ag_score), ]
 ```
 
 ## Data Visualization
@@ -305,9 +309,7 @@ gwrG_los$results
 
 ```{r}
 pairs(as.data.frame(gwrG_td$lhat)[, 2:8])
-
 pairs(as.data.frame(gwrG_ag$lhat)[, 2:8])
-
 pairs(as.data.frame(gwrG_los$lhat)[, 2:8])
 ```
 
@@ -330,7 +332,7 @@ LMZ.F3GWR.test(gwrG_los)
 ```
 
 
-## Prediction
+## Prediction & Visualization
 ```{r}
 train_coords <- coordinates(sp_data_train)
 predict_coords <- coordinates(sp_data_predict)
@@ -414,16 +416,12 @@ spplot(sp_data, "median_td_score_fitted", col.regions = colorRampPalette(colors)
                         fill = NA, first = FALSE), 
        main = "Fitted Median Temporal Discounting Score")
 
-sp_data_train$median_ag_score_fitted <- gwrG_ag$SDF$pred
-
 colors <- c("white", "darkblue")
 spplot(sp_data, "median_ag_score_fitted", col.regions = colorRampPalette(colors)(60),
        at = seq(40, 90, length.out = 60),
        sp.layout = list("sp.polygons", highlighted_data, col = "black", lwd = 2,
                         fill = NA, first = FALSE), 
        main = "Fitted Median Agency Score")
-
-sp_data_train$median_los_score_fitted <- gwrG_los$SDF$pred
 
 colors <- c("white", "darkgreen")
 spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors)(60),
@@ -433,7 +431,244 @@ spplot(sp_data, "median_los_score_fitted", col.regions = colorRampPalette(colors
        main = "Fitted Median Loss Aversion Score")
 ```
 
+```{r}
+dat_gwr <- dat
+dat_subset <- dat[19:nrow(dat), ]
 
-# Inverse Distance Weighting
+dat_gwr[19:nrow(dat), "median_td_score"] <- round(tail(gwrG_td$SDF$pred, 24), 2)
+dat_gwr[19:nrow(dat), "median_ag_score"] <- round(tail(gwrG_ag$SDF$pred, 24), 2)
+dat_gwr[19:nrow(dat), "median_los_score"] <- round(tail(gwrG_los$SDF$pred, 24), 2)
 
-# Kriging Interpolation
+write_csv(dat_gwr, "./3_output/GWR_whole_dataset.csv")
+```
+
+```{r}
+# Merge
+dat_slr_subset <- dat_slr[, c("UHF_id", "median_td_score", "median_ag_score", "median_los_score")]
+dat_gwr_subset <- dat_gwr[, c("UHF_id", "median_td_score", "median_ag_score", "median_los_score")]
+merged_data <- merge(dat_slr_subset, dat_gwr_subset, by = "UHF_id", suffixes = c("_slr", "_gwr"))
+write_csv(merged_data, "./3_output/score_slr_gwr.csv")
+```
+
+# LOOCV
+
+Leave-one-out Cross-validation
+
+## SLR
+```{r}
+models <- list(
+  "Temporal Discounting" = lm(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                               householdnum + no_vehicles + weighted_age + employment, data = dat),
+  "Agency" = lm(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                householdnum + no_vehicles + weighted_age + employment, data = dat),
+  "Loss Aversion" = lm(median_los_score ~ no_health_insurance + householdincome + 
+                       no_vehicles + weighted_age + employment, data = dat)
+)
+
+residuals_list <- list(
+  "Temporal Discounting" = rep(NA, nrow(dat)),
+  "Agency" = rep(NA, nrow(dat)),
+  "Loss Aversion" = rep(NA, nrow(dat))
+)
+
+for (i in 1:nrow(dat)) {
+  train_data <- dat[-i, ]
+  test_data <- dat[i, ]
+  
+  for (model_name in names(models)) {
+    model_formula <- formula(models[[model_name]])
+    
+    model <- lm(model_formula, data = train_data)
+    
+    # observation
+    predicted_value <- predict(model, newdata = test_data)
+    
+    # residual
+    actual_value <- test_data[[as.character(model_formula)[2]]]
+    residuals_list[[model_name]][i] <- actual_value - predicted_value
+  }
+}
+residuals_df <- data.frame(
+  Observation = 1:nrow(dat),
+  Temporal_Discounting = residuals_list[["Temporal Discounting"]],
+  Agency = residuals_list[["Agency"]],
+  Loss_Aversion = residuals_list[["Loss Aversion"]]
+)
+
+residuals_long <- reshape2::melt(residuals_df, id.vars = "Observation", 
+                                 variable.name = "Model", value.name = "Residual")
+
+ggplot(residuals_long, aes(x = Model, y = Residual)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Residuals for each Model using LOOCV")
+```
+
+### MSE
+
+```{r}
+mse_list <- sapply(residuals_list, function(residuals) {
+  mean(residuals^2, na.rm = TRUE)
+})
+
+print(mse_list)
+```
+
+## GWR
+```{r}
+residuals_list <- list(
+  "Temporal Discounting" = rep(NA, nrow(sp_data_train)),
+  "Agency" = rep(NA, nrow(sp_data_train)),
+  "Loss Aversion" = rep(NA, nrow(sp_data_train))
+)
+
+train_coords <- coordinates(sp_data_train)
+
+# Temporal Discounting LOOCV
+for (i in 1:nrow(sp_data_train)) {
+  sp_data_train_loo <- sp_data_train[-i, ]
+  sp_data_test_loo <- sp_data_train[i, ]
+  
+  bwG_td <- gwr.sel(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                      householdnum + no_vehicles + weighted_age + employment, 
+                    data = sp_data_train_loo, adapt = FALSE, gweight = gwr.Gauss, verbose = FALSE)
+  
+  gwrG_td <- gwr(median_td_score ~ no_health_insurance + bachelor + householdincome + 
+                   householdnum + no_vehicles + weighted_age + employment,
+                 data = sp_data_train_loo,
+                 bandwidth = bwG_td, 
+                 gweight = gwr.Gauss, 
+                 hatmatrix = TRUE)
+  
+  local_coefficients <- gwrG_td$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                             "householdincome", "householdnum", "no_vehicles", 
+                                             "weighted_age", "employment")]
+  
+  test_coords <- coordinates(sp_data_test_loo)
+  dists <- spDistsN1(train_coords[-i, ], test_coords, longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff <- local_coefficients[nearest_index, ]
+  
+  pred_vars <- as.numeric(c(1, sp_data_test_loo@data[, c("no_health_insurance", "bachelor", 
+                                                         "householdincome", "householdnum", 
+                                                         "no_vehicles", "weighted_age", 
+                                                         "employment")]))
+  
+  predicted_value <- sum(pred_vars * local_coeff)
+  
+  # residual
+  actual_value <- sp_data_test_loo@data[["median_td_score"]]
+  residuals_list[["Temporal Discounting"]][i] <- actual_value - predicted_value
+}
+
+# Agency LOOCV
+for (i in 1:nrow(sp_data_train)) {
+  sp_data_train_loo <- sp_data_train[-i, ]
+  sp_data_test_loo <- sp_data_train[i, ]
+  
+  bwG_agency <- gwr.sel(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                          householdnum + no_vehicles + weighted_age + employment, 
+                        data = sp_data_train_loo, adapt = FALSE, gweight = gwr.Gauss, verbose = FALSE)
+  
+  gwrG_agency <- gwr(median_ag_score ~ no_health_insurance + bachelor + householdincome + 
+                       householdnum + no_vehicles + weighted_age + employment,
+                     data = sp_data_train_loo,
+                     bandwidth = bwG_agency, 
+                     gweight = gwr.Gauss, 
+                     hatmatrix = TRUE)
+  
+  local_coefficients <- gwrG_agency$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                                 "householdincome", "householdnum", "no_vehicles", 
+                                                 "weighted_age", "employment")]
+  
+  test_coords <- coordinates(sp_data_test_loo)
+  dists <- spDistsN1(train_coords[-i, ], test_coords, longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff <- local_coefficients[nearest_index, ]
+  
+  pred_vars <- as.numeric(c(1, sp_data_test_loo@data[, c("no_health_insurance", "bachelor", 
+                                                         "householdincome", "householdnum", 
+                                                         "no_vehicles", "weighted_age", 
+                                                         "employment")]))
+  
+  predicted_value <- sum(pred_vars * local_coeff)
+  
+  # residual
+  actual_value <- sp_data_test_loo@data[["median_ag_score"]]
+  residuals_list[["Agency"]][i] <- actual_value - predicted_value
+}
+
+# Loss Aversion LOOCV
+for (i in 1:nrow(sp_data_train)) {
+  sp_data_train_loo <- sp_data_train[-i, ]
+  sp_data_test_loo <- sp_data_train[i, ]
+  
+  bwG_la <- gwr.sel(median_los_score ~ no_health_insurance + bachelor + householdincome + 
+                      householdnum + no_vehicles + weighted_age + employment, 
+                    data = sp_data_train_loo, adapt = FALSE, gweight = gwr.Gauss, verbose = FALSE)
+  
+  gwrG_la <- gwr(median_los_score ~ no_health_insurance + bachelor + householdincome + 
+                   householdnum + no_vehicles + weighted_age + employment,
+                 data = sp_data_train_loo,
+                 bandwidth = bwG_la, 
+                 gweight = gwr.Gauss, 
+                 hatmatrix = TRUE)
+  
+  local_coefficients <- gwrG_la$SDF@data[, c("X.Intercept.", "no_health_insurance", "bachelor", 
+                                             "householdincome", "householdnum", "no_vehicles", 
+                                             "weighted_age", "employment")]
+  
+  test_coords <- coordinates(sp_data_test_loo)
+  dists <- spDistsN1(train_coords[-i, ], test_coords, longlat = FALSE)
+  nearest_index <- which.min(dists)
+  local_coeff <- local_coefficients[nearest_index, ]
+  
+  pred_vars <- as.numeric(c(1, sp_data_test_loo@data[, c("no_health_insurance", "bachelor", 
+                                                         "householdincome", "householdnum", 
+                                                         "no_vehicles", "weighted_age", 
+                                                         "employment")]))
+  
+  predicted_value <- sum(pred_vars * local_coeff)
+  
+  # residual
+  actual_value <- sp_data_test_loo@data[["median_los_score"]]
+  residuals_list[["Loss Aversion"]][i] <- actual_value - predicted_value
+}
+
+residuals_df <- as.data.frame(residuals_list)
+```
+
+
+```{r}
+residuals_df <- data.frame(
+  Observation = 1:nrow(sp_data_train),
+  Temporal_Discounting = residuals_list[["Temporal Discounting"]],
+  Agency = residuals_list[["Agency"]],
+  Loss_Aversion = residuals_list[["Loss Aversion"]]
+)
+
+residuals_long <- reshape2::melt(residuals_df, id.vars = "Observation", 
+                                 variable.name = "Model", value.name = "Residual")
+
+ggplot(residuals_long, aes(x = Model, y = Residual)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.2, alpha = 0.6) +
+  theme_minimal() +
+  labs(title = "Residuals for GWR Models using LOOCV")
+
+```
+
+### MSE
+```{r}
+mse_list <- sapply(residuals_list, function(residuals) {
+  mean(residuals^2, na.rm = TRUE)
+})
+
+print(mse_list)
+```
+
+
+<!-- # Inverse Distance Weighting -->
+
+<!-- # Kriging Interpolation -->
