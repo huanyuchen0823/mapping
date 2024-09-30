@@ -502,7 +502,7 @@ ggplot(residuals_long, aes(x = Model, y = Residual)) +
   geom_boxplot() +
   geom_jitter(width = 0.2, alpha = 0.6) +
   theme_minimal() +
-  labs(title = "Residuals for each Model using LOOCV")
+  labs(title = "Residuals for SLR Models using LOOCV")
 ```
 
 ### MSE
@@ -516,17 +516,17 @@ print(mse_list)
 ```
 
 ## GWR
-```{r}
+```{r warning = FALSE}
 residuals_list <- list(
-  "Temporal Discounting" = rep(NA, nrow(sp_data_train)),
-  "Agency" = rep(NA, nrow(sp_data_train)),
-  "Loss Aversion" = rep(NA, nrow(sp_data_train))
+  "Temporal Discounting" = rep(NA, nrow(sp_data[1:18,])),
+  "Agency" = rep(NA, nrow(sp_data[1:18,])),
+  "Loss Aversion" = rep(NA, nrow(sp_data[1:18,]))
 )
 
-train_coords <- coordinates(sp_data_train)
+train_coords <- coordinates(sp_data[1:18,])
 
 # Temporal Discounting LOOCV
-for (i in 1:nrow(sp_data_train)) {
+for (i in 1:18) {
   sp_data_train_loo <- sp_data_train[-i, ]
   sp_data_test_loo <- sp_data_train[i, ]
   
@@ -563,7 +563,7 @@ for (i in 1:nrow(sp_data_train)) {
 }
 
 # Agency LOOCV
-for (i in 1:nrow(sp_data_train)) {
+for (i in 1:18) {
   sp_data_train_loo <- sp_data_train[-i, ]
   sp_data_test_loo <- sp_data_train[i, ]
   
@@ -600,7 +600,7 @@ for (i in 1:nrow(sp_data_train)) {
 }
 
 # Loss Aversion LOOCV
-for (i in 1:nrow(sp_data_train)) {
+for (i in 1:18) {
   sp_data_train_loo <- sp_data_train[-i, ]
   sp_data_test_loo <- sp_data_train[i, ]
   
@@ -642,7 +642,7 @@ residuals_df <- as.data.frame(residuals_list)
 
 ```{r}
 residuals_df <- data.frame(
-  Observation = 1:nrow(sp_data_train),
+  Observation = 1:18,
   Temporal_Discounting = residuals_list[["Temporal Discounting"]],
   Agency = residuals_list[["Agency"]],
   Loss_Aversion = residuals_list[["Loss Aversion"]]
