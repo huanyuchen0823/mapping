@@ -118,6 +118,39 @@ p3 <- ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id),
 grid.arrange(p1, p2, p3, ncol = 1)
 ```
 
+## Mode
+```{r}
+summary_data_mode <- dat %>%
+  filter(UHF_id %in% summary_data$UHF_id) %>%
+  group_by(UHF_id) %>%
+  summarise(
+    density_info1 = list(density(td_score_scaled, na.rm = TRUE)),
+    density_info2 = list(density(agency_scores_scaled, na.rm = TRUE)),
+    density_info3 = list(density(loss_aversion_scores_scaled, na.rm = TRUE)),
+    .groups = 'drop'
+  ) %>%
+  mutate(
+    mode_td = sapply(density_info1, function(d) {
+      max_density_index <- which.max(d$y)
+      d$x[max_density_index]
+    }),
+    mode_ag = sapply(density_info2, function(d) {
+      max_density_index <- which.max(d$y)
+      d$x[max_density_index]
+    }),
+    mode_los = sapply(density_info3, function(d) {
+      max_density_index <- which.max(d$y)
+      d$x[max_density_index]
+    })
+  )
+
+summary_data <- summary_data %>%
+  left_join(summary_data_mode %>% select(UHF_id, mode_td, mode_ag, mode_los), 
+            by = "UHF_id")
+
+write_csv(summary_data, "./1_output/dat_merge_2_UHF>=15_mode.csv")
+```
+
 ## Density Plot
 
 ```{r}
@@ -125,17 +158,25 @@ ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = td_score_scaled)
   geom_density(fill = "darkblue", alpha = 0.6) +
   facet_wrap(~UHF_id) +
   theme_minimal() +
-  labs(title = "Density Plot of TD Scores by UHF region", x = "TD Score (scaled)", y = "Density")
+  labs(title = "Density Plot of TD Scores by UHF region", x = "TD Score (scaled)", y = "Density") + 
+  geom_vline(data = summary_data, aes(xintercept = mode_td), 
+             color = "black", linetype = "dashed", linewidth = 1)
 
 ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = agency_scores_scaled)) +
   geom_density(fill = "darkgreen", alpha = 0.6) +
   facet_wrap(~UHF_id) +
   theme_minimal() +
-  labs(title = "Density Plot of Agency Scores by UHF region", x = "Agency Score (scaled)", y = "Density")
+  labs(title = "Density Plot of Agency Scores by UHF region", x = "Agency Score (scaled)", y = "Density") + 
+  geom_vline(data = summary_data, aes(xintercept = mode_ag), 
+             color = "black", linetype = "dashed", linewidth = 1)
 
-ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id), aes(x = loss_aversion_scores_scaled)) +
+ggplot(dat %>% filter(UHF_id %in% summary_data$UHF_id),
+       aes(x = loss_aversion_scores_scaled)) +
   geom_density(fill = "darkred", alpha = 0.6) +
   facet_wrap(~UHF_id) +
   theme_minimal() +
-  labs(title = "Density Plot of Loss Aversion Scores by UHF region", x = "Loss Aversion Score (scaled)", y = "Density")
+  labs(title = "Density Plot of Loss Aversion Scores by UHF region", x = "Loss Aversion Score (scaled)", y = "Density") + 
+  geom_vline(data = summary_data, aes(xintercept = mode_los), 
+             color = "black", linetype = "dashed", linewidth = 1)
 ```
+

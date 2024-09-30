@@ -35,13 +35,30 @@ write_csv(census, "./3_output/census_precentage.csv")
 ```
 
 ## Merge with three scores
-
+### Option 1: median scores
 ```{r}
-scores <- read_csv("./1_output/dat_merge_2_UHF>=15.csv")
+# scores <- read_csv("./1_output/dat_merge_2_UHF>=15.csv")
+# dat <- left_join(census, scores, by = "UHF_id") %>%
+#   arrange(is.na(ParticipantCount)) %>%
+#   select(-c(total_population, ParticipantCount, mean_td_score, sd_td_score,
+#          mean_los_score, sd_los_score, mean_ag_score, sd_ag_score))
+```
+
+### Option 2: mode scores
+Current: Only replaced the value of mode into the variable of median in order to check the performance of the following code without any further adjustments
+```{r}
+scores <- read_csv("./1_output/dat_merge_2_UHF>=15_mode.csv")
 dat <- left_join(census, scores, by = "UHF_id") %>%
   arrange(is.na(ParticipantCount)) %>%
   select(-c(total_population, ParticipantCount, mean_td_score, sd_td_score,
-         mean_los_score, sd_los_score, mean_ag_score, sd_ag_score))
+         mean_los_score, sd_los_score, mean_ag_score, sd_ag_score)) %>%
+  mutate(median_td_score = replace(median_td_score, !is.na(mode_td),
+                                   mode_td[!is.na(mode_td)]),
+         median_ag_score = replace(median_ag_score, !is.na(mode_ag),
+                                   mode_ag[!is.na(mode_ag)]),
+         median_los_score = replace(median_los_score, !is.na(mode_los),
+                                   mode_td[!is.na(mode_los)])) %>%
+  select(-c(mode_td, mode_ag, mode_los))
 ```
 
 ## Weighted Age
